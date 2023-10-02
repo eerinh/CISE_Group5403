@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import ArticleList from '../components/ArticleList';
+import ArticleList from "./ArticleList";
 
 const ModeratorPage : React.FC = () => {
     const [articles, setArticles] = useState([
