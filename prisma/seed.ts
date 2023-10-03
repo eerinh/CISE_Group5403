@@ -15,6 +15,7 @@ async function main() {
       type_of_research: "Sample Type of Research",
       type_of_participant: "Sample Type of Participant",
       approved: true,
+      checked: true
     },
   });
   await prisma.article.create({
@@ -28,7 +29,8 @@ async function main() {
       result_of_evidence: "Sample Result of Evidence",
       type_of_research: "Sample Type of Research",
       type_of_participant: "Sample Type of Participant",
-      approved: null,
+      approved: false,
+      checked: false
     },
   });
 }
