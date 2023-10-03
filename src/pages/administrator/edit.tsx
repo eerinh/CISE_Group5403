@@ -51,7 +51,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
   const router = useRouter();
 
   function onSubmit(values: z.infer<typeof formSchema>): void {
-    if (article) {
+    if (article != undefined) {
       updateArticleMutation.mutate({ id: article.id, ...values });
     } else {
       createArticleMutation.mutate(values);
@@ -135,7 +135,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
               <FormItem>
                 <FormLabel>Date</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} value={field.value.toISOString().split('T')[0]} />
+                  <Input type="date" {...field} value={field.value?.toISOString().split('T')[0]} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
