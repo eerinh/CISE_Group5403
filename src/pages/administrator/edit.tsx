@@ -50,7 +50,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
   const createArticleMutation = api.articles.create.useMutation();
   const router = useRouter();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof formSchema>): void {
     if (article) {
       updateArticleMutation.mutate({ id: article.id, ...values });
     } else {
@@ -95,7 +95,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
       </Card>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={(event) => void form.handleSubmit(onSubmit)(event)} className="space-y-8">
           <FormField
             control={form.control}
             name="title"
@@ -135,7 +135,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
               <FormItem>
                 <FormLabel>Date</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input type="date" {...field} value={field.value.toISOString().split('T')[0]} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
