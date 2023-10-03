@@ -83,6 +83,16 @@ const ModeratorPage : React.FC = () => {
         setNextArticleId((prevId) => prevId + 1);
     };
 
+    const addButtonStyle = {
+        backgroundColor: '#008CBA',
+        color: 'white',
+        padding: '10px 20px',
+        margin: '10px 0',
+        cursor: 'pointer',
+        border: 'none',
+        borderRadius: '4px',
+      };
+
     return(
         <div>
             <h1>Modertor Dashboard</h1>
@@ -92,7 +102,7 @@ const ModeratorPage : React.FC = () => {
             onApprove={handleApprove}
             onDeny={handleDeny}
             />
-            <button onClick={addNewArticle}>Add New Article</button>
+            <button onClick={addNewArticle} style={addButtonStyle}>Add New Article</button>
         </div>
     );
 };
