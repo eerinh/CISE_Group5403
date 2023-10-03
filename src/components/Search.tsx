@@ -1,15 +1,18 @@
-// Search.tsx
+import React from "react";
+import styles from "../styles/Search.module.css";
 
-import React from 'react';
-
-type Props = {
-  className?: string;
+type SearchProps = {
   onUpdate: (query: string) => void;
 };
 
-const Search: React.FC<Props> = ({ className, onUpdate }) => {
+const Search: React.FC<SearchProps> = ({ onUpdate }) => {
   return (
-    <input className={className} onChange={(e) => onUpdate(e.target.value)} />
+    <input
+      className={styles.searchBar}
+      type="text"
+      placeholder="Search..."
+      onChange={(e) => onUpdate(e.target.value)}
+    />
   );
 };
 

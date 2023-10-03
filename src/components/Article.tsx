@@ -1,28 +1,27 @@
-// Article.tsx
-import React from 'react';
+import React from "react";
+import styles from "../styles/Article.module.css";
 
-type ArticleType = {
-  id: string;
-  title: string;
-  author: string;
-  journal_name: string;
-  date: Date;
-  approved: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+type ArticleProps = {
+  article: {
+    id: string;
+    title: string;
+    author: string;
+    journal_name: string;
+    date: Date;
+    approved: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  };
 };
 
-interface Props {
-  article: ArticleType;
-}
-
-const Article: React.FC<Props> = ({ article }) => {
+const Article: React.FC<ArticleProps> = ({ article }) => {
   return (
-    <div>
-      <h3>{article.title}</h3>
-      <p>{article.author}</p>
-      <p>{article.journal_name}</p>
-      <p>{article.date.toLocaleDateString()}</p>
+    <div className={styles.article}>
+      <h2 className={styles.articleTitle}>{article.title}</h2>
+      <p className={styles.articleMeta}>
+        Author: {article.author} | Journal: {article.journal_name} | Date:{" "}
+        {article.date.toDateString()}
+      </p>
     </div>
   );
 };
