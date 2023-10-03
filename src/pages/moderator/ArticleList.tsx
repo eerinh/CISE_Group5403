@@ -45,6 +45,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles, newArticleIds, onAp
       <ul>
         {articles.map((article) => (
           <li key={article.id} style={listItemStyle}>
+            {newArticleIds.includes(article.id) && <p style={{ color: 'red' }}>New</p>}
             <h3>{article.title}</h3>
             <p>Author: {article.author}</p>
             <p>Year of Publication: {article.yearOfPublication}</p>
@@ -54,7 +55,6 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles, newArticleIds, onAp
             <p>Result of Evidence: {article.resultOfEvidence}</p>
             <p>Type of Research: {article.typeOfResearch}</p>
             <p>Type of Participant: {article.typeOfParticipant}</p>
-            {newArticleIds.includes(article.id) && <p style={{ color: 'red' }}>New</p>}
             <button
               onClick={() => onApprove(article.id)}
               style={{ ...buttonStyle, backgroundColor: '#4CAF50' }}

@@ -66,14 +66,14 @@ const ModeratorPage : React.FC = () => {
             id: nextArticleId,
             title: `New Article ${nextArticleId}`,
             content: `New Content ${nextArticleId}`,
-            yearOfPublication: 0, // Provide a default value for yearOfPublication (replace with actual value)
-            author: '', // Provide a default value for author (replace with actual value)
-            journalName: '', // Provide a default value for journalName (replace with actual value)
-            SEPractice: '', // Provide a default value for SEPractice (replace with actual value)
-            claim: '', // Provide a default value for claim (replace with actual value)
-            resultOfEvidence: '', // Provide a default value for resultOfEvidence (replace with actual value)
-            typeOfResearch: '', // Provide a default value for typeOfResearch (replace with actual value)
-            typeOfParticipant: '', // Provide a default value for typeOfParticipant (replace with actual value)
+            yearOfPublication: 0, 
+            author: '', 
+            journalName: '', 
+            SEPractice: '', 
+            claim: '', 
+            resultOfEvidence: '', 
+            typeOfResearch: '', 
+            typeOfParticipant: '', 
 
         };
 
