@@ -12,14 +12,20 @@ datasource db {
 }
 
 model Article {
-    id           String   @id @default(cuid())
-    title        String
-    author       String
-    journal_name String
-    date         DateTime
-    approved     Boolean @default(false)
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
+    id                  String   @id @default(cuid())
+    title               String
+    author              String
+    date                DateTime
+    journal_name        String
+    se_practice         String
+    claim               String
+    result_of_evidence  String
+    type_of_research    String
+    type_of_participant String
+    approved            Boolean
+    checked             Boolean @default(false)
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @updatedAt
 }
 
 model Account {

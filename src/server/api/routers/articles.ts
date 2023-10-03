@@ -3,14 +3,20 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const aritlce = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   title: z.string(),
   author: z.string(),
-  journal_name: z.string(),
   date: z.date(),
+  journal_name: z.string(),
+  se_practice: z.string(),
+  claim: z.string(),
+  result_of_evidence: z.string(),
+  type_of_research: z.string(),
+  type_of_participant: z.string(),
   approved: z.boolean(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  checked: z.boolean(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 });
 
 export const articleRouter = createTRPCRouter({
@@ -42,14 +48,14 @@ export const articleRouter = createTRPCRouter({
     .input(aritlce)
     .output(aritlce)
     .meta({ openapi: { method: "POST", path: "/articles" } })
-    .query(({ input, ctx }) => {
+    .mutation(({ input, ctx }) => {
       return ctx.prisma.article.create({
         data: input,
       });
     }),
 
   update: publicProcedure
-    .input(aritlce)
+    .input(aritlce.partial())
     .output(aritlce)
     .meta({ openapi: { method: "PUT", path: "/articles" } })
     .mutation(({ input, ctx }) => {
