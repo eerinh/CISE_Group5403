@@ -1,0 +1,157 @@
+[33mcommit 50253e0285732f00969d7a7dbc67056e89cdfca6[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Harrison <imthatguyh9@gmail.com>
+Date:   Tue Oct 3 22:40:25 2023 +1300
+
+    code demo for lab
+
+[33mcommit 843558f3d3df4340715531471df8e4a77ca8f223[m
+Author: Harrison <imthatguyh9@gmail.com>
+Date:   Tue Oct 3 21:13:02 2023 +1300
+
+    pushing so i can have it on my desktop
+
+[33mcommit f88e74bb1e41d8be129faf4f8d0a3592986409fb[m
+Merge: 49e662c b2c43e2
+Author: eerinh <91291065+eerinh@users.noreply.github.com>
+Date:   Tue Oct 3 22:04:15 2023 +1300
+
+    Merge pull request #4 from eerinh/db-connect
+    
+    connected jacks code to trpc
+
+[33mcommit b2c43e2a15c4792132b5c1ed02e20340d2629659[m[33m ([m[1;31morigin/db-connect[m[33m)[m
+Author: BlakeFernandes <blakef148@gmail.com>
+Date:   Tue Oct 3 21:57:38 2023 +1300
+
+    fixed build issue
+
+[33mcommit b8bb37a27f8057d98d6da7ed8e60fcb43a6b4def[m
+Author: BlakeFernandes <blakef148@gmail.com>
+Date:   Tue Oct 3 21:55:44 2023 +1300
+
+    connected jacks code to trpc
+
+[33mcommit 49e662c22cf2fd847acce656e5b61cbf133381cc[m
+Merge: 6bd5334 3c524c5
+Author: eerinh <91291065+eerinh@users.noreply.github.com>
+Date:   Tue Oct 3 20:31:33 2023 +1300
+
+    Merge pull request #2 from eerinh/Moderator
+    
+    Created Moderation Page
+
+[33mcommit 3c524c5d5bafb533c113976869026d0a483bc7e6[m[33m ([m[1;31morigin/Moderator[m[33m)[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 20:30:35 2023 +1300
+
+    Updated The Fix For Undefined Array
+
+[33mcommit 07253eb07f59f659e50b7bf78697f43b80e54374[m
+Merge: 0e24645 6bd5334
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 20:20:57 2023 +1300
+
+    Merge branch 'main' of https://github.com/eerinh/CISE_Group5403 into Moderator
+
+[33mcommit 6bd53347aceff57c6002d7d33ee1739df25e72bc[m
+Merge: 57b3bbf 03aa3e7
+Author: eerinh <91291065+eerinh@users.noreply.github.com>
+Date:   Tue Oct 3 20:17:53 2023 +1300
+
+    Merge pull request #3 from eerinh/bug-fix
+    
+    big fix?
+
+[33mcommit 03aa3e7c45c8c797f543062479ce5b9199d3b851[m
+Author: BlakeFernandes <blakef148@gmail.com>
+Date:   Tue Oct 3 20:16:34 2023 +1300
+
+    big fix?
+
+[33mcommit 0e2464525274123e837d46c0cc5cd3eecea561c0[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 20:10:27 2023 +1300
+
+    Okay Code
+
+[33mcommit 3a0fb9643c296cccf4aa576b9e27b2e780e10f83[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 16:58:42 2023 +1300
+
+    Added Button Styling
+    
+    Styling added to the button
+
+[33mcommit a446e8632f66bb49c451b85123fa7d9828be11f3[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 16:55:55 2023 +1300
+
+    Added Some  Place Holder Data To The Pages
+    
+    Place Holders Has Been Added
+
+[33mcommit 72a984befec4d0ce4fa3a1f94e721725ebeab4c2[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 16:32:15 2023 +1300
+
+    added some css
+    
+    Added Some Styling To The Page
+
+[33mcommit eebaa4ac6da061497b84de1b18b9962e1416aabf[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 15:28:54 2023 +1300
+
+    Added A Approve and Deny Button
+    
+    The Code Works
+
+[33mcommit 3ff3c95fa5ee58e0529be34c042fd0548cc5f496[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 12:59:06 2023 +1300
+
+    Created the dummy data
+
+[33mcommit be6519cb30afdf267d8b0563e2fc64f318e19336[m
+Author: bombard21 <wangxiaofeng153@gmail.com>
+Date:   Tue Oct 3 12:52:37 2023 +1300
+
+    Built The Bases Of Code
+    
+    Need to add the dummy data for testing
+
+[33mcommit 57b3bbf516dcf0d551e05169b33be4287ebf9e88[m[33m ([m[1;31morigin/Home-Page[m[33m)[m
+Merge: 4ebe8c5 30cf5a7
+Author: eerinh <91291065+eerinh@users.noreply.github.com>
+Date:   Tue Oct 3 12:06:03 2023 +1300
+
+    Merge pull request #1 from eerinh/trpc-setup
+    
+    Trpc setup
+
+[33mcommit 30cf5a7428b45b6fb2dbff1d7b4534f5d546b8a0[m[33m ([m[1;31morigin/trpc-setup[m[33m)[m
+Author: BlakeFernandes <blakef148@gmail.com>
+Date:   Tue Oct 3 07:38:34 2023 +1300
+
+    code clean up
+
+[33mcommit cbe198c21d24da01921bfe4b46e6c324e1cf106e[m
+Author: BlakeFernandes <blakef148@gmail.com>
+Date:   Tue Oct 3 06:47:16 2023 +1300
+
+    added seed.ts
+    added articles router
+    added openapi-trpc
+    added 'approved' field to Article
+
+[33mcommit 4ebe8c5ac55dbb175257b48831677466bb0f3263[m
+Author: BlakeFernandes <blakef148@gmail.com>
+Date:   Fri Sep 8 20:12:24 2023 +1200
+
+    init t3
+
+[33mcommit 7c45ae0b49bded96f2ea3646c8142fbc026d4098[m
+Author: Harrison <imthatguyh9@gmail.com>
+Date:   Tue Aug 22 16:42:09 2023 +1200
+
+    add gitignore first so we down fuck up the repo at the start

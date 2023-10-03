@@ -1,0 +1,23 @@
+.article {
+    padding: 15px;
+    border-bottom: 1px solid #eaeaea;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.article:hover {
+    background-color: #f2f2f2;
+}
+
+.articleTitle {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.articleMeta {
+    font-size: 14px;
+    color: #666;
+}
