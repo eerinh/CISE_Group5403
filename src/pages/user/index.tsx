@@ -148,7 +148,7 @@ const User: React.FC = () => {
         <select
           className={styles.inputElement}
           onChange={handleYearChange}
-          value={selectedYear || ""}
+          value={selectedYear ?? ""}
         >
           <option value="">All Years</option>
           {allAvailableYears.map((year) => (
