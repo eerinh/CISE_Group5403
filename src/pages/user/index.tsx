@@ -1,75 +1,97 @@
-// ArticleSearch.tsx
 import React, { useState, useEffect, useMemo } from "react";
 import Search from "../../components/Search";
-import Article from "../../components/Article";
-import styles from "../../styles/ArticleSearch.module.css";
-
+import styles from "../../styles/User.module.css";
 
 type ArticleType = {
   id: string;
   title: string;
   author: string;
-  journal_name: string;
   date: Date;
+  journal_name: string;
+  se_practice: string;
+  claim: string;
+  result_of_evidence: string;
+  type_of_research: string;
+  type_of_participant: string;
   approved: boolean;
+  checked: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
 
-const ArticleSearch: React.FC = () => {
+const User: React.FC = () => {
   const [articles, setArticles] = useState<ArticleType[]>([]);
   const [query, setQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<keyof ArticleType | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  // dummy data
+  // remove later
   const dummyData: ArticleType[] = [
     {
       id: "1",
-      title: "Sample Article 1",
+      title: "Effective SE Practices in Modern Web Development",
       author: "John Doe",
-      journal_name: "Journal 1",
       date: new Date("2021-01-01"),
+      journal_name: "Journal of Software Engineering",
+      se_practice: "Continuous Integration",
+      claim: "Improves Deployment Frequency",
+      result_of_evidence: "Strongly Supportive",
+      type_of_research: "Empirical Study",
+      type_of_participant: "Professional Developers",
       approved: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      checked: true,
+      createdAt: new Date("2021-01-02"),
+      updatedAt: new Date("2021-01-03"),
     },
     {
       id: "2",
-      title: "Sample Article 2",
-      author: "Jane Smith",
-      journal_name: "Journal 2",
-      date: new Date("2021-02-15"),
+      title: "Agile vs Waterfall: A Comparative Analysis",
+      author: "Alice Waters",
+      date: new Date("2019-05-15"),
+      journal_name: "Software Design Monthly",
+      se_practice: "Agile Development",
+      claim: "Enhances Collaboration",
+      result_of_evidence: "Moderately Supportive",
+      type_of_research: "Case Study",
+      type_of_participant: "Software Engineers",
       approved: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      checked: false,
+      createdAt: new Date("2019-05-20"),
+      updatedAt: new Date("2019-05-22"),
     },
     {
       id: "3",
-      title: "Sample Article 3",
-      author: "Robert Brown",
-      journal_name: "Journal 1",
-      date: new Date("2020-11-10"),
+      title: "The Impact of Pair Programming on Software Quality",
+      author: "Bob Ross",
+      date: new Date("2020-10-01"),
+      journal_name: "Journal of Software Engineering",
+      se_practice: "Pair Programming",
+      claim: "Improves Code Quality",
+      result_of_evidence: "Strongly Supportive",
+      type_of_research: "Empirical Study",
+      type_of_participant: "Professional Developers",
       approved: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      checked: true,
+      createdAt: new Date("2020-10-02"),
+      updatedAt: new Date("2020-10-03"),
     },
     {
       id: "4",
-      title: "Sample Article 4",
-      author: "Emily White",
-      journal_name: "Journal 3",
-      date: new Date("2019-08-24"),
-      approved: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: "5",
-      title: "Sample Article 5",
-      author: "Chris Black",
-      journal_name: "Journal 2",
-      date: new Date("2021-05-19"),
+      title: "Impact of TDD on Software Defect Rates",
+      author: "Robert Smith",
+      date: new Date("2020-12-10"),
+      journal_name: "Testing Times Journal",
+      se_practice: "Test-Driven Development",
+      claim: "Reduces Bugs and Defects",
+      result_of_evidence: "Strongly Supportive",
+      type_of_research: "Empirical Study",
+      type_of_participant: "QA Engineers",
       approved: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      checked: false,
+      createdAt: new Date("2020-12-12"),
+      updatedAt: new Date("2020-12-15"),
     },
   ];
 
@@ -85,18 +107,39 @@ const ArticleSearch: React.FC = () => {
 
   useEffect(() => {
     const lowercasedQuery = query.toLowerCase();
-    const filteredData = dummyData.filter((article) => {
-      const matchesQuery =
-        article.title.toLowerCase().includes(lowercasedQuery) ||
-        article.author.toLowerCase().includes(lowercasedQuery);
-
-      const matchesYear =
-        !selectedYear ||
-        new Date(article.date).getFullYear().toString() === selectedYear;
-      return matchesQuery && matchesYear;
+    let filteredData = dummyData.filter((article) => {
+      return article.se_practice.toLowerCase().includes(lowercasedQuery);
     });
+    if (selectedYear) {
+      filteredData = filteredData.filter((article) => {
+        return new Date(article.date).getFullYear() === parseInt(selectedYear);
+      });
+    }
     setArticles(filteredData);
   }, [query, selectedYear]);
+
+  const sortedArticles = useMemo(() => {
+    const sorted = [...articles];
+    if (sortField) {
+      sorted.sort((a, b) => {
+        if (a[sortField] < b[sortField])
+          return sortDirection === "asc" ? -1 : 1;
+        if (a[sortField] > b[sortField])
+          return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+    return sorted;
+  }, [articles, sortField, sortDirection]);
+
+  const handleSort = (field: keyof ArticleType) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -115,13 +158,30 @@ const ArticleSearch: React.FC = () => {
           ))}
         </select>
       </div>
-      <div>
-        {articles.map((article) => (
-          <Article key={article.id} article={article} />
-        ))}
-      </div>
+      <table className={styles.articlesTable}>
+        <thead>
+          <tr>
+            <th onClick={() => handleSort("title")}>Title</th>
+            <th onClick={() => handleSort("author")}>Author</th>
+            <th onClick={() => handleSort("date")}>Date</th>
+            <th onClick={() => handleSort("journal_name")}>Journal Name</th>
+            <th onClick={() => handleSort("se_practice")}>SE Practice</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedArticles.map((article) => (
+            <tr key={article.id}>
+              <td>{article.title}</td>
+              <td>{article.author}</td>
+              <td>{article.date.toDateString()}</td>
+              <td>{article.journal_name}</td>
+              <td>{article.se_practice}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default ArticleSearch;
+export default User;

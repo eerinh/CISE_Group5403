@@ -10,7 +10,7 @@ const Search: React.FC<SearchProps> = ({ onUpdate }) => {
     <input
       className={styles.searchBar}
       type="text"
-      placeholder="Search..."
+      placeholder="Search SE Practices..."
       onChange={(e) => onUpdate(e.target.value)}
     />
   );
