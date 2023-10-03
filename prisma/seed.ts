@@ -1,21 +1,44 @@
-import { createOpenApiNextHandler } from "trpc-openapi";
-import { env } from "~/env.mjs";
-import { appRouter } from "~/server/api/root";
-import { createTRPCContext } from "~/server/api/trpc";
+import { PrismaClient } from "@prisma/client";
 
-/**
- * This is baslcally default trpc but following the openapi spec
- * used for requesting resources outside of the app
- */
-export default createOpenApiNextHandler({
-  router: appRouter,
-  createContext: createTRPCContext,
-  onError:
-    env.NODE_ENV === "development"
-      ? ({ path, error }) => {
-          console.error(
-            `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`,
-          );
-        }
-      : undefined,
-});
+const prisma = new PrismaClient();
+
+async function main() {
+  await prisma.article.create({
+    data: {
+      title: "Sample Article Title",
+      author: "John Doe",
+      date: new Date(),
+      journal_name: "Journal of Sample Articles",
+      se_practice: "TDD",
+      claim: "Sample Claim",
+      result_of_evidence: "Sample Result of Evidence",
+      type_of_research: "Sample Type of Research",
+      type_of_participant: "Sample Type of Participant",
+      approved: true,
+    },
+  });
+  await prisma.article.create({
+    data: {
+      title: "Sample Article Title 2",
+      author: "John Doe",
+      date: new Date(),
+      journal_name: "Journal of Sample Articles",
+      se_practice: "TDD",
+      claim: "Sample Claim",
+      result_of_evidence: "Sample Result of Evidence",
+      type_of_research: "Sample Type of Research",
+      type_of_participant: "Sample Type of Participant",
+      approved: null,
+    },
+  });
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

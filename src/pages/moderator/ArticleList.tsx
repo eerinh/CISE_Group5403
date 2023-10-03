@@ -1,28 +1,29 @@
-// components/ArticleList.tsx
 import React from 'react';
 
-interface Article {
-  id: number;
+export interface Article {
+  id?: string | undefined;
   title: string;
-  content: string;
-  yearOfPublication: number;
   author: string;
-  journalName: string;
-  SEPractice: string;
+  date: Date;
+  journal_name: string;
+  se_practice: string;
   claim: string;
-  resultOfEvidence: string;
-  typeOfResearch: string;
-  typeOfParticipant: string;
+  result_of_evidence: string;
+  type_of_research: string;
+  type_of_participant: string;
+  approved: boolean;
+  checked?: boolean;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
 }
 
 interface ArticleListProps {
   articles: Article[];
-  newArticleIds: number[];
-  onApprove: (articleId: number) => void;
-  onDeny: (articleId: number) => void;
+  onApprove: (articleId: string) => void;
+  onDeny: (articleId: string) => void;
 }
 
-const ArticleList: React.FC<ArticleListProps> = ({ articles, newArticleIds, onApprove, onDeny }) => {
+const ArticleList: React.FC<ArticleListProps> = ({ articles, onApprove, onDeny }) => {
   const listItemStyle = {
     borderBottom: '1px solid #ccc',
     marginBottom: '10px',
@@ -45,24 +46,25 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles, newArticleIds, onAp
       <ul>
         {articles?.map((article) => (
           <li key={article.id} style={listItemStyle}>
-            {newArticleIds.includes(article.id) && <p style={{ color: 'red' }}>New</p>}
+            {article.checked == false && <p style={{ color: 'red' }}>New</p>}
             <h3>{article.title}</h3>
+            <p>Status: {article.approved ? 'Approved' : 'Unapproved'}</p>
             <p>Author: {article.author}</p>
-            <p>Year of Publication: {article.yearOfPublication}</p>
-            <p>Journal Name: {article.journalName}</p>
-            <p>SE Practice: {article.SEPractice}</p>
+            <p>Year of Publication: {article.date.toDateString()}</p>
+            <p>Journal Name: {article.journal_name}</p>
+            <p>SE Practice: {article.se_practice}</p>
             <p>Claim: {article.claim}</p>
-            <p>Result of Evidence: {article.resultOfEvidence}</p>
-            <p>Type of Research: {article.typeOfResearch}</p>
-            <p>Type of Participant: {article.typeOfParticipant}</p>
+            <p>Result of Evidence: {article.result_of_evidence}</p>
+            <p>Type of Research: {article.type_of_research}</p>
+            <p>Type of Participant: {article.type_of_participant}</p>
             <button
-              onClick={() => onApprove(article.id)}
+              onClick={() => onApprove(article.id!)}
               style={{ ...buttonStyle, backgroundColor: '#4CAF50' }}
             >
               Approve
             </button>
             <button
-              onClick={() => onDeny(article.id)}
+              onClick={() => onDeny(article.id!)}
               style={{ ...buttonStyle, backgroundColor: '#FF5733' }}
             >
               Deny
