@@ -43,7 +43,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles, newArticleIds, onAp
     <div>
       <h2>Articles</h2>
       <ul>
-        {articles.map((article) => (
+        {articles?.map((article) => (
           <li key={article.id} style={listItemStyle}>
             {newArticleIds.includes(article.id) && <p style={{ color: 'red' }}>New</p>}
             <h3>{article.title}</h3>
