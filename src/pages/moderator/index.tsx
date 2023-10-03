@@ -10,6 +10,18 @@ const ModeratorPage : React.FC = () => {
     const [newArticleIds, setNewArticleIds] = useState<number[]>([]);
     const [nextArticleId, setNextArticleId] = useState(3);
 
+    const handleApprove = (articleId: number) => {
+        setNewArticleIds((prevIds) => prevIds.filter((id) => id !== articleId));
+    };
+
+    const handleDeny = (articleId: number) => {
+        setArticles((prevArticles) => prevArticles.filter((article) => article.id !== articleId));
+
+
+        setNewArticleIds((prevIds) => prevIds.filter((id) => id !== articleId));    
+    };
+
+
 
     const addNewArticle =() =>{
         const newArticle = {
@@ -27,7 +39,12 @@ const ModeratorPage : React.FC = () => {
     return(
         <div>
             <h1>Modertor Dashboard</h1>
-            <ArticleList articles={articles} newArticleIds={newArticleIds} />
+            <ArticleList 
+            articles={articles} 
+            newArticleIds={newArticleIds} 
+            onApprove={handleApprove}
+            onDeny={handleDeny}
+            />
             <button onClick={addNewArticle}>Add New Article</button>
         </div>
     );
