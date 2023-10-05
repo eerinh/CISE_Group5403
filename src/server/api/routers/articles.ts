@@ -45,7 +45,7 @@ export const articleRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(aritlce)
+    .input(aritlce.extend({ id: z.string().optional() }))
     .output(aritlce)
     .meta({ openapi: { method: "POST", path: "/articles" } })
     .mutation(({ input, ctx }) => {
