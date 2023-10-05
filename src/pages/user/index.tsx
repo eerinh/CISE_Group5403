@@ -1,105 +1,29 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Search from "../../components/Search";
 import styles from "../../styles/User.module.css";
-
-type ArticleType = {
-  id: string;
-  title: string;
-  author: string;
-  date: Date;
-  journal_name: string;
-  se_practice: string;
-  claim: string;
-  result_of_evidence: string;
-  type_of_research: string;
-  type_of_participant: string;
-  approved: boolean;
-  checked: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import { api } from "~/utils/api";
 
 const User: React.FC = () => {
   const [articles, setArticles] = useState<ArticleType[]>([]);
+  const [allArticles, setAllArticles] = useState<ArticleType[]>([]);
   const [query, setQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [sortField, setSortField] = useState<keyof ArticleType | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-  // dummy data
-  // remove later
-  const dummyData: ArticleType[] = [
-    {
-      id: "1",
-      title: "Effective SE Practices in Modern Web Development",
-      author: "John Doe",
-      date: new Date("2021-01-01"),
-      journal_name: "Journal of Software Engineering",
-      se_practice: "Continuous Integration",
-      claim: "Improves Deployment Frequency",
-      result_of_evidence: "Strongly Supportive",
-      type_of_research: "Empirical Study",
-      type_of_participant: "Professional Developers",
-      approved: true,
-      checked: true,
-      createdAt: new Date("2021-01-02"),
-      updatedAt: new Date("2021-01-03"),
-    },
-    {
-      id: "2",
-      title: "Agile vs Waterfall: A Comparative Analysis",
-      author: "Alice Waters",
-      date: new Date("2019-05-15"),
-      journal_name: "Software Design Monthly",
-      se_practice: "Agile Development",
-      claim: "Enhances Collaboration",
-      result_of_evidence: "Moderately Supportive",
-      type_of_research: "Case Study",
-      type_of_participant: "Software Engineers",
-      approved: false,
-      checked: false,
-      createdAt: new Date("2019-05-20"),
-      updatedAt: new Date("2019-05-22"),
-    },
-    {
-      id: "3",
-      title: "The Impact of Pair Programming on Software Quality",
-      author: "Bob Ross",
-      date: new Date("2020-10-01"),
-      journal_name: "Journal of Software Engineering",
-      se_practice: "Pair Programming",
-      claim: "Improves Code Quality",
-      result_of_evidence: "Strongly Supportive",
-      type_of_research: "Empirical Study",
-      type_of_participant: "Professional Developers",
-      approved: true,
-      checked: true,
-      createdAt: new Date("2020-10-02"),
-      updatedAt: new Date("2020-10-03"),
-    },
-    {
-      id: "4",
-      title: "Impact of TDD on Software Defect Rates",
-      author: "Robert Smith",
-      date: new Date("2020-12-10"),
-      journal_name: "Testing Times Journal",
-      se_practice: "Test-Driven Development",
-      claim: "Reduces Bugs and Defects",
-      result_of_evidence: "Strongly Supportive",
-      type_of_research: "Empirical Study",
-      type_of_participant: "QA Engineers",
-      approved: true,
-      checked: false,
-      createdAt: new Date("2020-12-12"),
-      updatedAt: new Date("2020-12-15"),
-    },
-  ];
+  const articlesQuery = api.articles.getAll.useQuery();
+  
+  useEffect(() => {
+    if (articlesQuery.data) {
+      setAllArticles(articlesQuery?.data);
+    }
+  }, [articlesQuery.data]);
 
   const allAvailableYears = useMemo(() => {
     return Array.from(
-      new Set(dummyData.map((a) => new Date(a.date).getFullYear())),
+      new Set(allArticles.map((a) => new Date(a.date).getFullYear())),
     ).sort((a, b) => b - a);
-  }, [dummyData]);
+  }, [allArticles]);
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(event.target.value || null);
@@ -107,7 +31,7 @@ const User: React.FC = () => {
 
   useEffect(() => {
     const lowercasedQuery = query.toLowerCase();
-    let filteredData = dummyData.filter((article) => {
+    let filteredData = allArticles.filter((article) => {
       return article.se_practice.toLowerCase().includes(lowercasedQuery);
     });
     if (selectedYear) {
@@ -116,16 +40,18 @@ const User: React.FC = () => {
       });
     }
     setArticles(filteredData);
-  }, [query, selectedYear]);
+  }, [query, selectedYear, allArticles]);
 
   const sortedArticles = useMemo(() => {
     const sorted = [...articles];
     if (sortField) {
       sorted.sort((a, b) => {
-        if (a[sortField] < b[sortField])
-          return sortDirection === "asc" ? -1 : 1;
-        if (a[sortField] > b[sortField])
-          return sortDirection === "asc" ? 1 : -1;
+        if (a[sortField] && b[sortField]) {
+          if (a[sortField]! < b[sortField]!)
+            return sortDirection === "asc" ? -1 : 1;
+          if (a[sortField]! > b[sortField]!)
+            return sortDirection === "asc" ? 1 : -1;
+        }
         return 0;
       });
     }

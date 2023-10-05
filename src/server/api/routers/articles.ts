@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const aritlce = z.object({
-  id: z.string().optional(),
+  id: z.string(),
   title: z.string(),
   author: z.string(),
   date: z.date(),
@@ -15,8 +15,8 @@ const aritlce = z.object({
   type_of_participant: z.string(),
   approved: z.boolean(),
   checked: z.boolean(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
 export const articleRouter = createTRPCRouter({
