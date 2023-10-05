@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const aritlce = z.object({
-  id: z.string().optional(),
+  id: z.string(),
   title: z.string(),
   author: z.string(),
   date: z.date(),
@@ -45,7 +45,7 @@ export const articleRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(aritlce)
+    .input(aritlce.extend({ id: z.string().optional() }))
     .output(aritlce)
     .meta({ openapi: { method: "POST", path: "/articles" } })
     .mutation(({ input, ctx }) => {
