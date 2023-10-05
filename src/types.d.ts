@@ -1,5 +1,5 @@
-type ArticleType = {
-  id: string;
+export interface Article {
+  id?: string | undefined;
   title: string;
   author: string;
   date: Date;
@@ -10,7 +10,7 @@ type ArticleType = {
   type_of_research: string;
   type_of_participant: string;
   approved: boolean;
-  checked: boolean;
-  createdAt: Date?;
-  updatedAt: Date?;
-};
+  checked?: boolean;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
+}

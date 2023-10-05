@@ -13,10 +13,10 @@ const aritlce = z.object({
   result_of_evidence: z.string(),
   type_of_research: z.string(),
   type_of_participant: z.string(),
-  approved: z.boolean(),
-  checked: z.boolean(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  approved: z.boolean().default(false),
+  checked: z.boolean().default(false),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 });
 
 export const articleRouter = createTRPCRouter({
