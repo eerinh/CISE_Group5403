@@ -1,95 +1,55 @@
+/* User.module.css */
+
 .container {
-  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  max-width: 90%;
-  margin: 30px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
 }
 
 .searchWrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
   margin-bottom: 20px;
 }
 
 .inputElement {
-  display: block;
-  width: auto;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.inputElement:focus {
-  border-color: #0077cc;
-}
-
-/* Table Styles */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table thead th {
-  background-color: #f4f4f4;
-  text-align: left;
-  padding: 10px 8px;
-  cursor: pointer;
-}
-
-.table tbody tr:nth-child(even) {
-  background-color: #f8f8f8;
-}
-
-.table tbody td {
+  margin-left: 10px;
   padding: 8px;
-  border-top: 1px solid #eaeaea;
-}
-
-.table tbody tr:hover {
-  background-color: #eef5ff;
-}
-
-/* Sortable column hover effect */
-.table thead th:hover {
-  background-color: #eaeaea;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .articlesTable {
   width: 100%;
   border-collapse: collapse;
+  border: 1px solid #e0e0e0;
+}
+
+.articlesTable thead {
+  background-color: #f7f7f7;
 }
 
 .articlesTable th,
 .articlesTable td {
-  border: 1px solid #eaeaea;
-  padding: 8px 15px;
-  text-align: left;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
 }
 
-.articlesTable th {
-  background-color: #f5f5f5;
+.detailsColumn {
+  text-align: center;
 }
 
-.articlesTable tr:nth-child(even) {
+.buttonFullWidth {
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.articleDetails {
+  padding: 20px;
   background-color: #f9f9f9;
-}
-
-.articleTitle {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.articleMeta {
-  color: #666;
-  font-size: 14px;
 }
