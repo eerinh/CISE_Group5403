@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Search from "../components/Search";
+import Search from "~/components/Search";
+import ArticleDetail from "~/components/ArticleDetail";
 import styles from "~/styles/User.module.css";
 import { api } from "~/utils/api";
 import { Article } from "~/types";
@@ -12,9 +13,18 @@ const User: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [sortField, setSortField] = useState<keyof Article | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-
   const articlesQuery = api.articles.getAll.useQuery();
-  
+  const [openDetails, setOpenDetails] = useState<string[]>([]);
+
+  const toggleDetails = (articleId: string) => {
+    setOpenDetails((prevState) => {
+      if (prevState.includes(articleId)) {
+        return prevState.filter((id) => id !== articleId);
+      }
+      return [...prevState, articleId];
+    });
+  };
+
   useEffect(() => {
     if (articlesQuery.data) {
       setAllArticles(articlesQuery?.data);
@@ -60,7 +70,7 @@ const User: React.FC = () => {
     return sorted;
   }, [articles, sortField, sortDirection]);
 
-  const handleSort = (field: keyof Article ) => {
+  const handleSort = (field: keyof Article) => {
     if (sortField === field) {
       setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
     } else {
@@ -73,7 +83,7 @@ const User: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.searchWrapper}>
         <Search onUpdate={setQuery} />
-        <select
+        {/* <select
           className={styles.inputElement}
           onChange={handleYearChange}
           value={selectedYear ?? ""}
@@ -84,7 +94,8 @@ const User: React.FC = () => {
               {year}
             </option>
           ))}
-        </select>
+        </select> */}
+        {/* Tony didnt like the filter by year button :( */}
       </div>
       <table className={styles.articlesTable}>
         <thead>
@@ -94,19 +105,33 @@ const User: React.FC = () => {
             <th onClick={() => handleSort("date")}>Date</th>
             <th onClick={() => handleSort("journal_name")}>Journal Name</th>
             <th onClick={() => handleSort("se_practice")}>SE Practice</th>
-            {/* <th onClick={() => handleSort("se_practice")}>More Info</th> */}
+            <th className={styles.detailsColumn}>More Details</th>
           </tr>
         </thead>
         <tbody>
           {sortedArticles.map((article) => (
-            <tr key={article.id}>
-              <td>{article.title}</td>
-              <td>{article.author}</td>
-              <td>{article.date.toDateString()}</td>
-              <td>{article.journal_name}</td>
-              <td>{article.se_practice}</td>
-              {/* <td className="flex justify-center"><Button>More</Button></td> */}
-            </tr>
+            <React.Fragment key={article.id}>
+              <tr>
+                <td>{article.title}</td> <td>{article.author}</td>
+                <td>{new Date(article.date).toLocaleDateString()}</td>
+                <td>{article.journal_name}</td> <td>{article.se_practice}</td>
+                <td className={`flex justify-center ${styles.detailsColumn}`}>
+                  <Button
+                    className={styles.buttonFullWidth}
+                    onClick={() => toggleDetails(article.id!)}
+                  >
+                    {openDetails.includes(article.id!) ? "Close" : "More"}
+                  </Button>
+                </td>
+              </tr>
+              {openDetails.includes(article.id!) && (
+                <tr>
+                  <td colSpan={6} className={styles.articleDetails}>
+                    <ArticleDetail article={article} />
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
           ))}
         </tbody>
       </table>
