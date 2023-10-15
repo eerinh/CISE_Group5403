@@ -5,6 +5,8 @@ import styles from "~/styles/User.module.css";
 import { api } from "~/utils/api";
 import { Article } from "~/types";
 import { Button } from "~/components/ui/button";
+import { NavigationMenuDemo } from "~/components/Navigation";
+
 
 const User: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -80,10 +82,13 @@ const User: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.searchWrapper}>
-        <Search onUpdate={setQuery} />
-        {/* <select
+    <>
+      <NavigationMenuDemo />
+      
+      <div className={styles.container}>
+        <div className={styles.searchWrapper}>
+          <Search onUpdate={setQuery} />
+          {/* <select
           className={styles.inputElement}
           onChange={handleYearChange}
           value={selectedYear ?? ""}
@@ -95,47 +100,49 @@ const User: React.FC = () => {
             </option>
           ))}
         </select> */}
-        {/* Tony didnt like the filter by year button :( */}
-      </div>
-      <table className={styles.articlesTable}>
-        <thead>
-          <tr>
-            <th onClick={() => handleSort("title")}>Title</th>
-            <th onClick={() => handleSort("author")}>Author</th>
-            <th onClick={() => handleSort("date")}>Date</th>
-            <th onClick={() => handleSort("journal_name")}>Journal Name</th>
-            <th onClick={() => handleSort("se_practice")}>SE Practice</th>
-            <th className={styles.detailsColumn}>More Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedArticles.map((article) => (
-            <React.Fragment key={article.id}>
-              <tr>
-                <td>{article.title}</td> <td>{article.author}</td>
-                <td>{new Date(article.date).toLocaleDateString()}</td>
-                <td>{article.journal_name}</td> <td>{article.se_practice}</td>
-                <td className={`flex justify-center ${styles.detailsColumn}`}>
-                  <Button
-                    className={styles.buttonFullWidth}
-                    onClick={() => toggleDetails(article.id!)}
-                  >
-                    {openDetails.includes(article.id!) ? "Close" : "More"}
-                  </Button>
-                </td>
-              </tr>
-              {openDetails.includes(article.id!) && (
+          {/* Tony didnt like the filter by year button :( */}
+        </div>
+        <table className={styles.articlesTable}>
+          <thead>
+            <tr>
+              <th onClick={() => handleSort("title")}>Title</th>
+              <th onClick={() => handleSort("author")}>Author</th>
+              <th onClick={() => handleSort("date")}>Date</th>
+              <th onClick={() => handleSort("journal_name")}>Journal Name</th>
+              <th onClick={() => handleSort("se_practice")}>SE Practice</th>
+              <th className={styles.detailsColumn}>More Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedArticles.map((article) => (
+              <React.Fragment key={article.id}>
                 <tr>
-                  <td colSpan={6} className={styles.articleDetails}>
-                    <ArticleDetail article={article} />
+                  <td>{article.title}</td> <td>{article.author}</td>
+                  <td>{new Date(article.date).toLocaleDateString()}</td>
+                  <td>{article.journal_name}</td> <td>{article.se_practice}</td>
+                  <td className={`flex justify-center ${styles.detailsColumn}`}>
+                    <Button
+                      variant={openDetails.includes(article.id!) ? "destructive" : "default"}
+                      className={styles.buttonFullWidth}
+                      onClick={() => toggleDetails(article.id!)}
+                    >
+                      {openDetails.includes(article.id!) ? "Close" : "More"}
+                    </Button>
                   </td>
                 </tr>
-              )}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                {openDetails.includes(article.id!) && (
+                  <tr>
+                    <td colSpan={6} className={styles.articleDetails}>
+                      <ArticleDetail article={article} />
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

@@ -1,8 +1,12 @@
+import { NavigationMenuDemo } from "~/components/Navigation";
 import ArticleForm from "../administrator/edit";
 
 const ArticleCreate = () => {
     return (
-        <ArticleForm article={undefined} />
+        <div className="bg-accent">
+            <NavigationMenuDemo />
+            <ArticleForm article={undefined} />
+        </div>
     );
 }
 

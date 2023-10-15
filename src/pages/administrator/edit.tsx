@@ -69,164 +69,166 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
 
   return (
     <>
-      <Card className='pb-5'>
-        <CardHeader>Extra Options</CardHeader>
-        <CardContent>
-          <div className='flex justify-between space-x-5 pb-5'>
-            <Button className='w-full' onClick={() => { setUploadType(FormState.PASTE) }}>Paste BibTeX</Button>
-            <Button className='w-full' onClick={() => { setUploadType(FormState.UPLOAD) }}>Upload File</Button>
-          </div>
-          {uploadType == FormState.PASTE && (
-            <>
-              <Textarea
-                placeholder="Write a tagline for an ice cream shop"
-                className="mb-5 min-h-[150px] flex-1 p-4 md:min-h-[250px] lg:min-h-[250px]"
-              />
-              <Button>Submit</Button>
-            </>
-          )}
-          {uploadType == FormState.UPLOAD && (
-            <>
-              <Input className="mb-5" id="picture" type="file" />
-              <Button>Submit</Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
+      <div className='m-16'>
+        <Card className='pb-5'>
+          <CardHeader>Extra Options</CardHeader>
+          <CardContent>
+            <div className='flex justify-between space-x-5 pb-5'>
+              <Button className='w-full' onClick={() => { setUploadType(FormState.PASTE) }}>Paste BibTeX</Button>
+              <Button className='w-full' onClick={() => { setUploadType(FormState.UPLOAD) }}>Upload File</Button>
+            </div>
+            {uploadType == FormState.PASTE && (
+              <>
+                <Textarea
+                  placeholder="Write a tagline for an ice cream shop"
+                  className="mb-5 min-h-[150px] flex-1 p-4 md:min-h-[250px] lg:min-h-[250px]"
+                />
+                <Button>Submit</Button>
+              </>
+            )}
+            {uploadType == FormState.UPLOAD && (
+              <>
+                <Input className="mb-5" id="picture" type="file" />
+                <Button>Submit</Button>
+              </>
+            )}
+          </CardContent>
+        </Card>
 
-      <Form {...form}>
-        <form onSubmit={(event) => void form.handleSubmit(onSubmit)(event)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="author"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Author</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} value={field.value?.toISOString().split('T')[0]} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="journal_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Journal Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="se_practice"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>SE Practice</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="claim"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="result_of_evidence"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Result of Evidence</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="type_of_participant"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Type of Participant</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button><input type="submit" /></Button>
-        </form>
-      </Form>
+        <Form {...form}>
+          <form onSubmit={(event) => void form.handleSubmit(onSubmit)(event)} className="space-y-8 mt-6 border p-4 bg-white">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="author"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Author</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} value={field.value?.toISOString().split('T')[0]} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="journal_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Journal Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="se_practice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>SE Practice</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="claim"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="result_of_evidence"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Result of Evidence</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="type_of_participant"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type of Participant</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button><input type="submit" /></Button>
+          </form>
+        </Form>
+      </div>
     </>
   );
 };
