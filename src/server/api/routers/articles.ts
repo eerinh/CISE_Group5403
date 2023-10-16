@@ -66,4 +66,34 @@ export const articleRouter = createTRPCRouter({
         data: input,
       });
     }),
+
+  setRating: publicProcedure
+    .input(z.object({ id: z.string(), rating: z.number() }))
+    .output(z.boolean())
+    .meta({ openapi: { method: "PUT", path: "/articles/rating" } })
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.article.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          rating: input.rating,
+        },
+      });
+    }),
+
+  getRatings: publicProcedure
+    .input(z.void())
+    .output(z.array(z.object({ id: z.string(), rating: z.number() })))
+    .meta({ openapi: { method: "GET", path: "/articles/rating" } })
+    .query(async ({ ctx }) => {
+      const articles = await ctx.prisma.article.findMany({
+        select: {
+          id: true,
+          rating: true,
+        },
+      });
+
+      return articles;
+    }),
 });
