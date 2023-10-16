@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 import { Article } from "~/types";
 import { Button } from "~/components/ui/button";
 import { NavigationMenuDemo } from "~/components/Navigation";
+import Link from "next/link";
 
 
 const User: React.FC = () => {
@@ -110,7 +111,7 @@ const User: React.FC = () => {
               <th onClick={() => handleSort("date")}>Date</th>
               <th onClick={() => handleSort("journal_name")}>Journal Name</th>
               <th onClick={() => handleSort("se_practice")}>SE Practice</th>
-              <th className={styles.detailsColumn}>More Details</th>
+              <th className={styles.detailsColumn}>Edit</th>
             </tr>
           </thead>
           <tbody>
@@ -121,13 +122,7 @@ const User: React.FC = () => {
                   <td>{new Date(article.date).toLocaleDateString()}</td>
                   <td>{article.journal_name}</td> <td>{article.se_practice}</td>
                   <td className={`flex justify-center ${styles.detailsColumn}`}>
-                    <Button
-                      variant={openDetails.includes(article.id!) ? "destructive" : "default"}
-                      className={styles.buttonFullWidth}
-                      onClick={() => toggleDetails(article.id!)}
-                    >
-                      {openDetails.includes(article.id!) ? "Close" : "More"}
-                    </Button>
+                  <Link href={`administrator/edit/${article.id}`}><Button>Edit</Button></Link>
                   </td>
                 </tr>
                 {openDetails.includes(article.id!) && (
