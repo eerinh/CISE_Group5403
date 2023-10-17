@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
-const aritlce = z.object({
+const aritcle = z.object({
   id: z.string(),
   title: z.string(),
   author: z.string(),
@@ -22,7 +22,7 @@ const aritlce = z.object({
 export const articleRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(z.void())
-    .output(z.array(aritlce))
+    .output(z.array(aritcle))
     .meta({ openapi: { method: "GET", path: "/articles" } })
     .query(async ({ ctx }) => {
       const articles = await ctx.prisma.article.findMany();
@@ -32,7 +32,7 @@ export const articleRouter = createTRPCRouter({
 
   get: publicProcedure
     .input(z.object({ id: z.string() }))
-    .output(aritlce.nullable())
+    .output(aritcle.nullable())
     .meta({ openapi: { method: "GET", path: "/articles/{id}" } })
     .query(async ({ input, ctx }) => {
       const article = await ctx.prisma.article.findFirst({
@@ -45,8 +45,8 @@ export const articleRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(aritlce.extend({ id: z.string().optional() }))
-    .output(aritlce)
+    .input(aritcle.extend({ id: z.string().optional() }))
+    .output(aritcle)
     .meta({ openapi: { method: "POST", path: "/articles" } })
     .mutation(({ input, ctx }) => {
       return ctx.prisma.article.create({
@@ -55,8 +55,8 @@ export const articleRouter = createTRPCRouter({
     }),
 
   update: publicProcedure
-    .input(aritlce.partial())
-    .output(aritlce)
+    .input(aritcle.partial())
+    .output(aritcle)
     .meta({ openapi: { method: "PUT", path: "/articles" } })
     .mutation(({ input, ctx }) => {
       return ctx.prisma.article.update({
@@ -66,4 +66,53 @@ export const articleRouter = createTRPCRouter({
         data: input,
       });
     }),
+
+    getUncheckedArticles: publicProcedure
+    .input(z.void())
+    .output(z.array(aritcle))
+    .meta({ openapi: { method: "GET", path: "/articles/unchecked" } })
+    .query(async ({ ctx }) => {
+      const articles = await ctx.prisma.article.findMany({
+        where: {
+          checked: false,
+        },
+      });
+
+      return articles;
+    }),
+
+  approveArticle: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .output(aritcle)
+    .meta({ openapi: { method: "PUT", path: "/articles/{id}/approve" } })
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.article.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          approved: true,
+          checked: true,
+        },
+      });
+    }),
+
+  rejectArticle: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .output(aritcle)
+    .meta({ openapi: { method: "PUT", path: "/articles/{id}/reject" } })
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.article.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          approved: false,
+          checked: true,
+        },
+      });
+    }),
+
+
+    
 });
