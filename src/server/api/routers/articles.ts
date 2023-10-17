@@ -1,6 +1,8 @@
+import { Rating } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { Article } from "~/types";
 
 const aritlce = z.object({
   id: z.string(),
@@ -15,17 +17,50 @@ const aritlce = z.object({
   type_of_participant: z.string(),
   approved: z.boolean().default(false),
   checked: z.boolean().default(false),
+  averageRating: z.number().optional(),
+  totalRatings: z.number().optional(),
+  currentRating: z.number().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
 
+interface ExtendedArticle extends Article {
+  averageRating?: number;
+  totalRatings?: number;
+  currentRating?: number;
+  ratings?: Rating[];
+}
+
 export const articleRouter = createTRPCRouter({
   getAll: publicProcedure
-    .input(z.void())
-    .output(z.array(aritlce))
+    .input(z.object({ userId: z.string().optional() }))
+    .output(z.any())
     .meta({ openapi: { method: "GET", path: "/articles" } })
-    .query(async ({ ctx }) => {
-      const articles = await ctx.prisma.article.findMany();
+    .query(async ({ input, ctx }) => {
+      const articles = await ctx.prisma.article.findMany({
+        include: {
+          ratings: true,
+        },
+      });
+
+      for (const article of articles as ExtendedArticle[]) {
+        if (!article.ratings) return;
+        const totalRatings = article.ratings.reduce((sum, rating) => sum + rating.ratingAmount, 0,);
+        article.averageRating = article.ratings.length ? totalRatings / article.ratings.length : 0;
+        article.totalRatings = article.ratings.length;
+        delete article.ratings; // If you don't want to send the ratings in the response
+
+        if (input?.userId) {
+          const ratings = await ctx.prisma.rating.findFirst({
+            where: {
+              userId: input.userId,
+              articleId: article.id,
+            },
+          })
+          article.currentRating = ratings?.ratingAmount ?? 0;
+        }
+      };
+
 
       return articles;
     }),
@@ -39,7 +74,21 @@ export const articleRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
+        include: {
+          ratings: true, // Include ratings for the article
+        },
       });
+
+      // if (article) {
+      //   const totalRatings = article.ratings.reduce(
+      //     (sum, rating) => sum + rating.ratingAmount,
+      //     0,
+      //   );
+      //   article.averageRating = article.ratings.length
+      //     ? totalRatings / article.ratings.length
+      //     : 0;
+      //   delete article.ratings; // If you don't want to send the ratings in the response
+      // }
 
       return article;
     }),
@@ -65,5 +114,50 @@ export const articleRouter = createTRPCRouter({
         },
         data: input,
       });
+    }),
+
+  setRating: publicProcedure
+    .input(z.object({ userId: z.string(), articleId: z.string(), rating: z.number() }))
+    .output(z.void())
+    .meta({ openapi: { method: "PUT", path: "/articles/rating" } })
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.rating.upsert({
+        where: {
+          userId_articleId: {
+            userId: input.userId,
+            articleId: input.articleId,
+          }
+        },
+        update: {
+          ratingAmount: input.rating,
+        },
+        create: {
+          userId: input.userId,
+          articleId: input.articleId,
+          ratingAmount: input.rating,
+        }
+      });
+    }),
+
+  getRatings: publicProcedure
+    .input(z.void())
+    .output(z.array(z.object({ id: z.string(), rating: z.number() })))
+    .meta({ openapi: { method: "GET", path: "/articles/rating" } })
+    .query(async ({ ctx }) => {
+      const articles = await ctx.prisma.article.findMany({
+        select: {
+          id: true,
+          ratings: true,
+        },
+      });
+
+      const ratings = articles.flatMap((article) =>
+        article.ratings.map((rating) => ({
+          id: article.id,
+          rating: rating.ratingAmount,
+        }))
+      );
+
+      return ratings;
     }),
 });

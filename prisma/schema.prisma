@@ -23,9 +23,19 @@ model Article {
     type_of_research    String
     type_of_participant String
     approved            Boolean
-    checked             Boolean @default(false)
+    checked             Boolean  @default(false)
     createdAt           DateTime @default(now())
     updatedAt           DateTime @updatedAt
+    ratings             Rating[]
+}
+
+model Rating {
+    ratingAmount Int
+    article      Article @relation(fields: [articleId], references: [id])
+    articleId    String
+    userId       String
+
+    @@unique([userId, articleId])
 }
 
 model Account {
