@@ -104,7 +104,7 @@ const AnalysisDropdown: React.FC<{
         Checked:
         <input
           type="checkbox"
-          checked={editedArticle.checked || false}
+          checked={editedArticle.checked ?? false}
           onChange={(e) => updateArticleProperty("checked", e.target.checked)}
         />
       </label>
