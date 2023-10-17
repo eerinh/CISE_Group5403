@@ -45,7 +45,7 @@ const AdminArticleView: React.FC<ArticleListProps> = ({ article }) => {
 }
 
 const AdminArticleList = () => {
-    const articlesQuery = api.articles.getAll.useQuery();
+    const articlesQuery = api.articles.getAll.useQuery({ userId: undefined });
 
     return (
         <div className="space-y-2">

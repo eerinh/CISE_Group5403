@@ -12,6 +12,8 @@ export interface Article {
   approved: boolean;
   checked?: boolean;
   averageRating?: number;
+  currentRating?: number;
+  totalRatings?: number;
   createdAt?: Date | undefined;
   updatedAt?: Date | undefined;
 }

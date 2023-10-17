@@ -6,14 +6,16 @@ interface UserDataContextProps {
 }
 
 export interface UserData {
-    id: number;
+    id: string;
 }
 
-const UserDataContext = createContext<UserData>({});
+const UserDataContext = createContext<UserData>({
+    id: new Date().getTime().toString(),
+});
 
 export const UserDataProvider: React.FC<UserDataContextProps> = ({ children }) => {
     const [userData, setUserData] = useState<UserData>({
-        id: new Date().getTime(),
+        id: new Date().getTime().toString(),
     });
 
     return (
