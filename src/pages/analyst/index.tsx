@@ -11,14 +11,17 @@ const AnalysisDropdown: React.FC<{
 }> = ({ article, onSave, onClose }) => {
   const [editedArticle, setEditedArticle] = useState(article);
 
-  const updateArticleProperty = (property: keyof Article, value: any) => {
+  const updateArticleProperty = <T extends keyof Article>(
+    property: T,
+    value: Article[T]
+  ) => {
     setEditedArticle((prev) => ({
       ...prev,
       [property]: value,
-      date_updated: new Date() // Setting the current date & time
+      updatedAt: new Date(),
     }));
-};
-
+  };
+``
   return (
     <div className={styles.analysisDropdown}>
       <label htmlFor="titleInput">Title:</label>
@@ -133,7 +136,7 @@ const AnalystView: React.FC = () => {
         {
           id: updatedArticle.id,
           ...updatedArticle,
-          updatedAt: new Date() // Setting the current date & time
+          updatedAt: new Date(), // Setting the current date & time
         },
         {
           onSuccess: () => {
@@ -156,8 +159,7 @@ const AnalystView: React.FC = () => {
     } else {
       console.error("Attempted to update an article without an ID.");
     }
-};
-
+  };
 
   const handleAnalysisOpen = (articleId: string) => {
     setOpenArticleId(articleId);
