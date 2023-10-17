@@ -5,6 +5,7 @@ import styles from "~/styles/User.module.css";
 import { api } from "~/utils/api";
 import { Article } from "~/types";
 import { Button } from "~/components/ui/button";
+import Rating from "~/components/ui/rating";
 
 const User: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -105,6 +106,7 @@ const User: React.FC = () => {
             <th onClick={() => handleSort("date")}>Date</th>
             <th onClick={() => handleSort("journal_name")}>Journal Name</th>
             <th onClick={() => handleSort("se_practice")}>SE Practice</th>
+            <th onClick={() => handleSort("averageRating")}>Rating</th>
             <th className={styles.detailsColumn}>More Details</th>
           </tr>
         </thead>
@@ -114,7 +116,9 @@ const User: React.FC = () => {
               <tr>
                 <td>{article.title}</td> <td>{article.author}</td>
                 <td>{new Date(article.date).toLocaleDateString()}</td>
-                <td>{article.journal_name}</td> <td>{article.se_practice}</td>
+                <td>{article.journal_name}</td>
+                <td>{article.se_practice}</td>
+                <td><Rating currentRating={article.averageRating ?? 0} updateRating={() => { }} /></td>
                 <td className={`flex justify-center ${styles.detailsColumn}`}>
                   <Button
                     className={styles.buttonFullWidth}
