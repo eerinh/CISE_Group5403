@@ -39,7 +39,7 @@
   padding: 1rem;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   width: 66.66%;
-
+  height: 80%;
   overflow-y: auto;
   padding: 2rem;
   display: flex;
@@ -48,15 +48,38 @@
 }
 
 .analysisDropdown input[type="text"],
-.analysisDropdown input[type="date"] {
-  width: 100%;
+.analysisDropdown input[type="date"],
+.analysisDropdown input[type="checkbox"] {
+  height: 36px; /* Adjust height to match textboxes */
   padding: 8px;
   border: 1px solid #e1e4e8;
   border-radius: 4px;
+}
+
+.analysisDropdown input[type="date"] {
+  width: 150px; /* Adjusted width for the date input */
+  /* top and bottom padding */
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .analysisDropdown label {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.analysisDropdown input[type="checkbox"] {
+  width: auto; /* Let the checkbox define its own width */
+  vertical-align: middle;
+}
+
+/* Adjusting for the Button component */
+.analysisDropdown .button {
+  width: 50%;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }

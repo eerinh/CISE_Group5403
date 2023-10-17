@@ -80,39 +80,4 @@ export const articleRouter = createTRPCRouter({
 
       return articles;
     }),
-
-  approveArticle: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .output(aritcle)
-    .meta({ openapi: { method: "PUT", path: "/articles/{id}/approve" } })
-    .mutation(async ({ input, ctx }) => {
-      return ctx.prisma.article.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          approved: true,
-          checked: true,
-        },
-      });
-    }),
-
-  rejectArticle: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .output(aritcle)
-    .meta({ openapi: { method: "PUT", path: "/articles/{id}/reject" } })
-    .mutation(async ({ input, ctx }) => {
-      return ctx.prisma.article.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          approved: false,
-          checked: true,
-        },
-      });
-    }),
-
-
-    
 });

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styles from "~/styles/analyst.module.css";
 import { api } from "~/utils/api";
 import { Article } from "~/types";
-import ArticleDetail from "~/components/ArticleDetail";
 import { Button } from "~/components/ui/button";
 
 const AnalysisDropdown: React.FC<{
@@ -13,8 +12,12 @@ const AnalysisDropdown: React.FC<{
   const [editedArticle, setEditedArticle] = useState(article);
 
   const updateArticleProperty = (property: keyof Article, value: any) => {
-    setEditedArticle((prev) => ({ ...prev, [property]: value }));
-  };
+    setEditedArticle((prev) => ({
+      ...prev,
+      [property]: value,
+      date_updated: new Date() // Setting the current date & time
+    }));
+};
 
   return (
     <div className={styles.analysisDropdown}>
@@ -62,7 +65,7 @@ const AnalysisDropdown: React.FC<{
         onChange={(e) => updateArticleProperty("claim", e.target.value)}
         placeholder="Claim"
       />
-      <label htmlFor="doiInput">DOI:</label>
+      <label htmlFor="doiInput">Result of Evidence:</label>
       <input
         type="text"
         value={editedArticle.result_of_evidence}
@@ -71,7 +74,7 @@ const AnalysisDropdown: React.FC<{
         }
         placeholder="Result of Evidence"
       />
-      <label htmlFor="doiInput">DOI:</label>
+      <label htmlFor="doiInput">Type of Research:</label>
       <input
         type="text"
         value={editedArticle.type_of_research}
@@ -80,7 +83,7 @@ const AnalysisDropdown: React.FC<{
         }
         placeholder="Type of Research"
       />
-      <label htmlFor="doiInput">DOI:</label>
+      <label htmlFor="doiInput">Type of Participant:</label>
       <input
         type="text"
         value={editedArticle.type_of_participant}
@@ -115,6 +118,7 @@ const AnalystView: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const notChecked = api.articles.getUncheckedArticles.useQuery();
   const [openArticleId, setOpenArticleId] = useState<string | null>(null);
+  const updateArticleMutation = api.articles.update.useMutation();
 
   useEffect(() => {
     if (notChecked.data) {
@@ -122,19 +126,39 @@ const AnalystView: React.FC = () => {
     }
   }, [notChecked.data]);
 
-  const saveArticleChanges = async (updatedArticle: Article) => {
-    try {
-      // Assuming your API has an 'updateArticle' function. You can replace this with the actual function.
-      const response = await api.articles.updateArticle(updatedArticle);
-      if (response) {
-        // Update the local state or refetch the articles if necessary.
-        // For now, I'm just closing the dropdown.
-        setOpenArticleId(null);
-      }
-    } catch (error) {
-      console.error("Failed to update article:", error);
+  const saveArticleChanges = (updatedArticle: Article) => {
+    // Ensure the article has an ID before updating
+    if (updatedArticle.id) {
+      updateArticleMutation.mutate(
+        {
+          id: updatedArticle.id,
+          ...updatedArticle,
+          updatedAt: new Date() // Setting the current date & time
+        },
+        {
+          onSuccess: () => {
+            // Handle any success actions, e.g., close the modal and refetch data
+            setOpenArticleId(null);
+
+            // Update the local state to reflect the change
+            setArticles((prevArticles) => {
+              return prevArticles.map((article) =>
+                article.id === updatedArticle.id ? updatedArticle : article,
+              );
+            });
+          },
+          onError: (error) => {
+            // Handle the error
+            console.error("Failed to update article:", error);
+          },
+        },
+      );
+    } else {
+      console.error("Attempted to update an article without an ID.");
     }
-  };
+};
+
+
   const handleAnalysisOpen = (articleId: string) => {
     setOpenArticleId(articleId);
   };
@@ -153,7 +177,9 @@ const AnalystView: React.FC = () => {
               {/* ... (other table data) */}
               <td className={styles.detailsColumn}>
                 <span className={styles.articleTitle}>{article.title}</span>
-                <Button onClick={() => handleAnalysisOpen(article.id)}>
+                <Button
+                  onClick={() => article.id && handleAnalysisOpen(article.id)}
+                >
                   Analyze
                 </Button>
                 {openArticleId === article.id && (
