@@ -1,19 +1,67 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Search from "~/components/Search";
 import ArticleDetail from "~/components/ArticleDetail";
-import styles from "~/styles/User.module.css";
+import ArticleList, { Article } from "./moderator/ArticleList";
 import { api } from "~/utils/api";
-import { Article } from "~/types";
+import styles from "~/styles/User.module.css";
 import { Button } from "~/components/ui/button";
 
+
 const User: React.FC = () => {
+  const articlesQuery = api.articles.getAll.useQuery();
+  const articleMutation = api.articles.update.useMutation({ onSuccess: () => articlesQuery.refetch() });
+  const createArticleMutation = api.articles.create.useMutation({ onSuccess: () => articlesQuery.refetch() });
+
+
+
+  useEffect(() => {
+    if (articlesQuery.data) {
+      setAllArticles(articlesQuery.data);
+      setArticles(articlesQuery.data);
+    }
+  }, [articlesQuery.data]);
+
+  const handleApprove = (articleId: string) => {
+    articleMutation.mutate({ id: articleId, approved: true, checked: true });
+  };
+
+  const handleDeny = (articleId: string) => {
+    articleMutation.mutate({ id: articleId, approved: false, checked: true });
+  };
+
+  const [showNotification, setShowNotification] = useState(false);
+
+
+  const addNewArticle = () => {
+    const newArticle = {
+      title: "Sample Article Title",
+      author: "John Doe",
+      date: new Date(),
+      journal_name: "Journal of Sample Articles",
+      se_practice: "TDD",
+      claim: "Sample Claim",
+      result_of_evidence: "Sample Result of Evidence",
+      type_of_research: "Sample Type of Research",
+      type_of_participant: "Sample Type of Participant",
+      approved: false,
+      checked: false
+    };
+
+    createArticleMutation.mutate(newArticle);
+    setShowNotification(true);
+
+    setTimeout(() => {
+      setShowNotification(false);
+  }, 3000);
+  };
+
+
   const [articles, setArticles] = useState<Article[]>([]);
   const [allArticles, setAllArticles] = useState<Article[]>([]);
   const [query, setQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [sortField, setSortField] = useState<keyof Article | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  const articlesQuery = api.articles.getAll.useQuery();
   const [openDetails, setOpenDetails] = useState<string[]>([]);
 
   const toggleDetails = (articleId: string) => {
@@ -80,63 +128,59 @@ const User: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.searchWrapper}>
-        <Search onUpdate={setQuery} />
-        {/* <select
-          className={styles.inputElement}
-          onChange={handleYearChange}
-          value={selectedYear ?? ""}
-        >
-          <option value="">All Years</option>
-          {allAvailableYears.map((year) => (
-            <option key={year} value={year.toString()}>
-              {year}
-            </option>
-          ))}
-        </select> */}
-        {/* Tony didnt like the filter by year button :( */}
+  <div className={styles.container}>
+    {showNotification && 
+      <div className={styles.notification}>
+        New article has been added!
       </div>
-      <table className={styles.articlesTable}>
-        <thead>
-          <tr>
-            <th onClick={() => handleSort("title")}>Title</th>
-            <th onClick={() => handleSort("author")}>Author</th>
-            <th onClick={() => handleSort("date")}>Date</th>
-            <th onClick={() => handleSort("journal_name")}>Journal Name</th>
-            <th onClick={() => handleSort("se_practice")}>SE Practice</th>
-            <th className={styles.detailsColumn}>More Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedArticles.map((article) => (
-            <React.Fragment key={article.id}>
+        
+      }
+    <div className={styles.searchWrapper}>
+      <Search onUpdate={setQuery} />
+      <Button onClick={addNewArticle} className={`${styles.buttonFullWidth} ${styles.addButton}`}>Add New Article</Button>
+    </div>
+
+    <table className={styles.articlesTable}>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Date</th>
+          <th>Journal Name</th>
+          <th>SE Practice</th>
+          <th>Claim</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {articles.map((article) => (
+          <React.Fragment key={article.id}>
+            <tr>
+              <td>{article.title}</td>
+              <td>{article.author}</td>
+              <td>{new Date(article.date).toLocaleDateString()}</td>
+              <td>{article.journal_name}</td>
+              <td>{article.se_practice}</td>
+              <td>{article.claim}</td>
+              <td>
+              <Button onClick={() => toggleDetails(article.id!)} className={styles.detailsButton}>Details</Button>
+              <Button onClick={() => handleApprove(article.id!)} className={styles.approveButton}>Approve</Button>
+              <Button onClick={() => handleDeny(article.id!)} className={styles.denyButton}>Deny</Button>
+              </td>
+            </tr>
+            {openDetails.includes(article.id!) && (
               <tr>
-                <td>{article.title}</td> <td>{article.author}</td>
-                <td>{new Date(article.date).toLocaleDateString()}</td>
-                <td>{article.journal_name}</td> <td>{article.se_practice}</td>
-                <td className={`flex justify-center ${styles.detailsColumn}`}>
-                  <Button
-                    className={styles.buttonFullWidth}
-                    onClick={() => toggleDetails(article.id!)}
-                  >
-                    {openDetails.includes(article.id!) ? "Close" : "More"}
-                  </Button>
+                <td colSpan={7} className={styles.articleDetails}>
+                  <ArticleDetail article={article} />
                 </td>
               </tr>
-              {openDetails.includes(article.id!) && (
-                <tr>
-                  <td colSpan={6} className={styles.articleDetails}>
-                    <ArticleDetail article={article} />
-                  </td>
-                </tr>
-              )}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+            )}
+          </React.Fragment>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 };
 
 export default User;
