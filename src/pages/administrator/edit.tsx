@@ -18,9 +18,7 @@ import { Input } from "~/components/ui/input"
 import { Article } from '../moderator/ArticleList';
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
-import { Textarea } from '~/components/ui/textarea';
-import { Card, CardContent, CardHeader } from '~/components/ui/card';
-import { Label } from '~/components/ui/label';
+import PasteBibTexModal from '~/components/administrator/PasteBibTeXModal';
 
 const formSchema = z.object({
   title: z.string().nonempty({ message: "Title is required" }),
@@ -38,17 +36,12 @@ interface ArticleFormProps {
   article: Article | undefined;
 }
 
-enum FormState {
-  PASTE,
-  UPLOAD,
-  NONE
-}
-
 const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
-  const [uploadType, setUploadType] = useState(FormState.NONE);
   const updateArticleMutation = api.articles.update.useMutation();
   const createArticleMutation = api.articles.create.useMutation();
   const router = useRouter();
+
+
 
   function onSubmit(values: z.infer<typeof formSchema>): void {
     if (article != undefined) {
@@ -69,30 +62,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
 
   return (
     <>
-      <Card className='pb-5'>
-        <CardHeader>Extra Options</CardHeader>
-        <CardContent>
-          <div className='flex justify-between space-x-5 pb-5'>
-            <Button className='w-full' onClick={() => { setUploadType(FormState.PASTE) }}>Paste BibTeX</Button>
-            <Button className='w-full' onClick={() => { setUploadType(FormState.UPLOAD) }}>Upload File</Button>
-          </div>
-          {uploadType == FormState.PASTE && (
-            <>
-              <Textarea
-                placeholder="Write a tagline for an ice cream shop"
-                className="mb-5 min-h-[150px] flex-1 p-4 md:min-h-[250px] lg:min-h-[250px]"
-              />
-              <Button>Submit</Button>
-            </>
-          )}
-          {uploadType == FormState.UPLOAD && (
-            <>
-              <Input className="mb-5" id="picture" type="file" />
-              <Button>Submit</Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
+      <PasteBibTexModal resetArticle={form.reset} />
 
       <Form {...form}>
         <form onSubmit={(event) => void form.handleSubmit(onSubmit)(event)} className="space-y-8">

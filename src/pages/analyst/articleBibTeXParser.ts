@@ -1,6 +1,6 @@
 import { Article } from "~/types";
 
-type BibTeXEntry = {
+type BibTeXEntryData = {
     type: string;
     key: string;
     fields: {
@@ -8,53 +8,59 @@ type BibTeXEntry = {
     };
 };
 
-type BibTeXFile = BibTeXEntry[];
+function parseBibTeX(data: string): BibTeXEntryData | null {
+  // Matches BibTeX entry
+  const entryPattern = /@(\w+)\{([\w\-_]+),\s*((?:.|\n)*?)\}/;
 
-const parseRaw = (data: string) => {
-    
-    const entries: BibTeXFile = [];
+  const match = entryPattern.exec(data);
+  
+  if (!match) {
+    return null; // Return null if no entry is found
+  }
 
-    // Matches BibTeX entries
-    const entryPattern = /@(\w+)\{([\w\-_]+),\s*((?:.|\n)*?)\}\s*(?=(?:@|$))/g;
+  const [_, type, key, fieldData] = match;
 
-    // Extract entries
-    let match;
-    while ((match = entryPattern.exec(data))) {
-        const [_, type, key, fieldData] = match;
+  const fields: { [key: string]: string | number } = {};
 
-        const fields: { [key: string]: string | number } = {};
+  // Match individual fields within an entry
+  const fieldPattern = /(\w+)\s*=\s*[{"](.+?)[}"],?\s*/g;
+  let fieldMatch;
+  while ((fieldMatch = fieldPattern.exec(fieldData))) {
+    const [_, fieldName, fieldValue] = fieldMatch;
 
-        // Match individual fields within an entry
-        const fieldPattern = /(\w+)\s*=\s*[{"](.+?)[}"],?\s*/g;
-        let fieldMatch;
-        while ((fieldMatch = fieldPattern.exec(fieldData))) {
-            const [_, fieldName, fieldValue] = fieldMatch;
+    // Try to convert value to number, otherwise keep as string
+    fields[fieldName] = isNaN(Number(fieldValue)) ? fieldValue : Number(fieldValue);
+  }
 
-            // Try to convert value to number, otherwise keep as string
-            fields[fieldName] = isNaN(Number(fieldValue)) ? fieldValue : Number(fieldValue);
-        }
-
-        entries.push({ type, key, fields });
-    }
-
-    return entries;
+  return { type, key, fields };
 }
 
-export const parse = (data: string) => {
-    const rawBibTeX = parseRaw(data);
+export function isValidBibtexEntry(bibtex: string): boolean {
+  const pattern = /^\s*@([a-zA-Z]+){([^,]+),([\s\S]*?)}\s*$/;
+
+  return pattern.test(bibtex);
+}
+
+
+export const parseBibTeXToArticle = (data: string) => {
+    const rawBibTeX = parseBibTeX(data);
+
+    if (!rawBibTeX) {
+        return null;
+    }
 
     const article: Article = {
-        title: ,
-        author: ,
-        date: ,
-        journal_name: ,
-        se_practice: ,
-        claim: ,
-        result_of_evidence: ,
-        type_of_research: ,
-        type_of_participant: ,
-        approved: ,
-        checked: ,
+        title: rawBibTeX.fields.title as string ?? '',
+        author: rawBibTeX.fields.author as string ?? '',
+        date: new Date(rawBibTeX.fields.year as number ?? 0, 0, 0),
+        journal_name: rawBibTeX.fields.journal as string ?? '',
+        se_practice: '',
+        claim: '',
+        result_of_evidence: '',
+        type_of_research: '',
+        type_of_participant: '',
+        approved: false,
+        checked: false,
     }
 
     return article;
