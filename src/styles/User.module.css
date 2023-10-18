@@ -4,6 +4,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  position: relative;
 }
 
 .searchWrapper {
@@ -52,4 +53,39 @@
 .articleDetails {
   padding: 20px;
   background-color: #f9f9f9;
+}
+/* Grid Layout */
+.gridWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.gridItem {
+  flex: 1 1 calc(33.33% - 20px); /* Three items per row with 20px gap */
+  border: 1px solid #eaeaea;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Card Layout */
+.cardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cardItem {
+  border: 1px solid #eaeaea;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+/* Article details for card view */
+.cardItem .articleDetails {
+  margin-top: 15px;
+  border-top: 1px solid #eaeaea;
+  padding-top: 15px;
 }
