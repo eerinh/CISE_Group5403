@@ -13,10 +13,12 @@
 }
 
 .inputElement {
+  flex-grow: 1; /* Allow it to take up any available space */
   margin-left: 10px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 100%; /* Makes it full width */
 }
 
 .articlesTable {
@@ -46,7 +48,12 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s; /* Added transform transition */
+}
+
+.buttonFullWidth:hover {
+  transform: scale(1.02); /* Slight enlargement effect on hover */
+  background-color: #ddd; /* A light gray color on hover */
 }
 
 .articleDetails {
@@ -55,31 +62,44 @@
 }
 
 .notification {
-    background-color: #4CAF50; /* green color for success */
-    color: white;
-    padding: 15px;
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-color: #4CAF50; /* green color for success */
+  color: white;
+  padding: 15px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.addButton,
+.approveButton,
+.denyButton,
+.detailsButton {
+  margin-right: 5px; /* Spacing between buttons */
+}
+
+.addButton:hover,
+.approveButton:hover,
+.denyButton:hover,
+.detailsButton:hover {
+  transform: translateY(-2px); /* Small lift on hover */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .addButton {
-    background-color: #008CBA; /* blue color */
+  background-color: #008CBA; /* blue color */
 }
 
 .approveButton {
-    background-color: #4CAF50; /* green color */
-    margin-left: 5px;
+  background-color: #4CAF50; /* green color */
 }
 
 .denyButton {
-    background-color: #f44336; /* red color */
-    margin-left: 5px;
+  background-color: #f44336; /* red color */
 }
 
 .detailsButton {
-    background-color: #9c27b0; /* purple color */
+  background-color: #9c27b0; /* purple color */
 }

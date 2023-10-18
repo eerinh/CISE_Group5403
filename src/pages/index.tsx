@@ -136,10 +136,9 @@ const User: React.FC = () => {
         
       }
     <div className={styles.searchWrapper}>
-      <Search onUpdate={setQuery} />
+    <Search onUpdate={setQuery} />
       <Button onClick={addNewArticle} className={`${styles.buttonFullWidth} ${styles.addButton}`}>Add New Article</Button>
     </div>
-
     <table className={styles.articlesTable}>
       <thead>
         <tr>
@@ -149,7 +148,7 @@ const User: React.FC = () => {
           <th>Journal Name</th>
           <th>SE Practice</th>
           <th>Claim</th>
-          <th>Actions</th>
+          <th className={styles.detailsColumn}>Actions</th>
         </tr>
       </thead>
       <tbody>
