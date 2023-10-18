@@ -11,6 +11,9 @@ export interface Article {
   type_of_participant: string;
   approved: boolean;
   checked?: boolean;
+  averageRating?: number;
+  currentRating?: number;
+  totalRatings?: number;
   createdAt?: Date | undefined;
   updatedAt?: Date | undefined;
 }

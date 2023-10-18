@@ -4,7 +4,7 @@ import { api } from "~/utils/api";
 
 
 const ModeratorPage: React.FC = () => {
-  const articlesQuery = api.articles.getAll.useQuery();
+  const articlesQuery = api.articles.getAll.useQuery({ userId: undefined });
   const articleMutation = api.articles.update.useMutation({ onSuccess: () => articlesQuery.refetch() });
   const createArticleMutation = api.articles.create.useMutation({ onSuccess: () => articlesQuery.refetch() });
   

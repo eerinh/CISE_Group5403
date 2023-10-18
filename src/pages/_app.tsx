@@ -5,6 +5,7 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
+import { UserDataProvider } from "~/providers/UserDataProvider";
 
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -13,7 +14,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <UserDataProvider>
+        <Component {...pageProps} />
+      </UserDataProvider>
     </SessionProvider>
   );
 };
