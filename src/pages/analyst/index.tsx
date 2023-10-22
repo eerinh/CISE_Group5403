@@ -27,7 +27,7 @@ const AnalysisDropdown: React.FC<{
   ``;
   return (
     <div className={styles.analysisDropdown}>
-      <label htmlFor="titleInput">Title:</label>
+      <label htmlFor="titleInput"className={styles.boldLabel}>Title:</label>
       <input
         id="titleInput"
         type="text"
@@ -35,14 +35,14 @@ const AnalysisDropdown: React.FC<{
         onChange={(e) => updateArticleProperty("title", e.target.value)}
         placeholder="Title"
       />
-      <label htmlFor="authorInput">Author:</label>
+      <label htmlFor="authorInput"className={styles.boldLabel}>Author:</label>
       <input
         type="text"
         value={editedArticle.author}
         onChange={(e) => updateArticleProperty("author", e.target.value)}
         placeholder="Author"
       />
-      <label htmlFor="dateInput">Date:</label>
+      <label htmlFor="dateInput"className={styles.boldLabel}>Date:</label>
       <input
         type="date"
         value={editedArticle.date.toISOString().split("T")[0]}
@@ -50,28 +50,28 @@ const AnalysisDropdown: React.FC<{
           updateArticleProperty("date", new Date(e.target.value))
         }
       />
-      <label htmlFor="journalInput">Journal:</label>
+      <label htmlFor="journalInput"className={styles.boldLabel}>Journal:</label>
       <input
         type="text"
         value={editedArticle.journal_name}
         onChange={(e) => updateArticleProperty("journal_name", e.target.value)}
         placeholder="Journal Name"
       />
-      <label htmlFor="volumeInput">SE Practice:</label>
+      <label htmlFor="volumeInput"className={styles.boldLabel}>SE Practice:</label>
       <input
         type="text"
         value={editedArticle.se_practice}
         onChange={(e) => updateArticleProperty("se_practice", e.target.value)}
         placeholder="SE Practice"
       />
-      <label htmlFor="issueInput">Claim:</label>
+      <label htmlFor="issueInput"className={styles.boldLabel}>Claim:</label>
       <input
         type="text"
         value={editedArticle.claim}
         onChange={(e) => updateArticleProperty("claim", e.target.value)}
         placeholder="Claim"
       />
-      <label htmlFor="doiInput">Result of Evidence:</label>
+      <label htmlFor="doiInput"className={styles.boldLabel}>Result of Evidence:</label>
       <input
         type="text"
         value={editedArticle.result_of_evidence}
@@ -80,7 +80,7 @@ const AnalysisDropdown: React.FC<{
         }
         placeholder="Result of Evidence"
       />
-      <label htmlFor="doiInput">Type of Research:</label>
+      <label htmlFor="doiInput"className={styles.boldLabel}>Type of Research:</label>
       <input
         type="text"
         value={editedArticle.type_of_research}
@@ -89,7 +89,7 @@ const AnalysisDropdown: React.FC<{
         }
         placeholder="Type of Research"
       />
-      <label htmlFor="doiInput">Type of Participant:</label>
+      <label htmlFor="doiInput"className={styles.boldLabel}>Type of Participant:</label>
       <input
         type="text"
         value={editedArticle.type_of_participant}
@@ -98,7 +98,7 @@ const AnalysisDropdown: React.FC<{
         }
         placeholder="Type of Participant"
       />
-      <label>
+      <label className={styles.boldLabel}>
         Approved:
         <input
           type="checkbox"
@@ -106,7 +106,7 @@ const AnalysisDropdown: React.FC<{
           onChange={(e) => updateArticleProperty("approved", e.target.checked)}
         />
       </label>
-      <label>
+      <label className={styles.boldLabel}>
         Checked:
         <input
           type="checkbox"
