@@ -10,6 +10,7 @@ const Search: React.FC<SearchProps> = ({ onUpdate }) => {
     <input
       className={styles.searchBar}
       type="text"
+      data-testid="search-input"
       placeholder="Search SE Practices..."
       onChange={(e) => onUpdate(e.target.value)}
     />
