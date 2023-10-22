@@ -229,48 +229,26 @@ const User: React.FC = () => {
   };
 
   return (
-    <>
-
-      <div className={styles.container}>
-        <NavigationMenuDemo />
-        <h3 className="text-2xl text-center font-bold pb-3">Analyst View</h3>
-        <div className={styles.searchWrapper}>
-          <Search onUpdate={setQuery} />
-          {/* <select
-          className={styles.inputElement}
-          onChange={handleYearChange}
-          value={selectedYear ?? ""}
-        >
-          <option value="">All Years</option>
-          {allAvailableYears.map((year) => (
-            <option key={year} value={year.toString()}>
-              {year}
-            </option>
-          ))}
-        </select> */}
-          {/* Tony didnt like the filter by year button :( */}
-        </div>
-        <table className={styles.articlesTable}>
-          <thead>
-            <tr>
-              <th onClick={() => handleSort("title")}>Title</th>
-              <th onClick={() => handleSort("author")}>Author</th>
-              <th onClick={() => handleSort("date")}>Date</th>
-              <th onClick={() => handleSort("journal_name")}>Journal Name</th>
-              <th onClick={() => handleSort("se_practice")}>SE Practice</th>
-              <th className={styles.detailsColumn}>More Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedArticles.map((article) => (
-              <React.Fragment key={article.id}>
-                <tr>
-                  <td>{article.title}</td> <td>{article.author}</td>
-                  <td>{new Date(article.date).toLocaleDateString()}</td>
-                  <td>{article.journal_name}</td> <td>{article.se_practice}</td>
-                  <td className={`flex justify-center ${styles.detailsColumn}`}>
+    <div className={styles.container}>
+      {articles.length === 0 ? (
+        <div className={styles.noArticlesMessage}>No articles</div>
+      ) : (
+        <>
+          <h2 className={styles.newArticlesHeader}>
+            New Articles ({articles.length})
+          </h2>
+          <table className={styles.articlesTable}>
+            {/* ... (table headers) */}
+            <tbody>
+              {articles.map((article) => (
+                <tr key={article.id}>
+                  {/* ... (other table data) */}
+                  <td className={styles.detailsColumn}>
+                    <span className={styles.articleTitle}>{article.title}</span>
                     <Button
-                      onClick={() => article.id && setOpenArticleId(article.id)}
+                      onClick={() =>
+                        article.id && setOpenArticleId(article.id)
+                      }
                     >
                       Analyze
                     </Button>
@@ -278,17 +256,17 @@ const User: React.FC = () => {
                       <AnalysisDropdown
                         article={article}
                         onSave={saveArticleChanges}
-                        onClose={() => setOpenArticleId(null)}
+                        onClose={() => { setOpenArticleId(null) }}
                       />
                     )}
                   </td>
                 </tr>
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+    </div>
   );
 };
 
