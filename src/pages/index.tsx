@@ -154,7 +154,7 @@ const User: React.FC = () => {
                 </tr>
                 {openDetails.includes(article.id!) && (
                   <tr>
-                    <td colSpan={6} className={styles.articleDetails}>
+                    <td colSpan={8} className={styles.articleDetails}>
                       <ArticleDetail article={article} />
                     </td>
                   </tr>
