@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
-import styles from "~/styles/analyst.module.css";
+import React, { useState, useEffect, useMemo } from "react";
+import Search from "~/components/Search";
+import ArticleDetail from "~/components/ArticleDetail";
+import styles from "~/styles/User.module.css";
 import { api } from "~/utils/api";
 import { Article } from "~/types";
 import { Button } from "~/components/ui/button";
+import { NavigationMenuDemo } from "~/components/Navigation";
 
 const AnalysisDropdown: React.FC<{
   article: Article;
@@ -13,7 +16,7 @@ const AnalysisDropdown: React.FC<{
 
   const updateArticleProperty = <T extends keyof Article>(
     property: T,
-    value: Article[T]
+    value: Article[T],
   ) => {
     setEditedArticle((prev) => ({
       ...prev,
@@ -21,7 +24,7 @@ const AnalysisDropdown: React.FC<{
       updatedAt: new Date(),
     }));
   };
-``
+  ``;
   return (
     <div className={styles.analysisDropdown}>
       <label htmlFor="titleInput">Title:</label>
@@ -117,17 +120,81 @@ const AnalysisDropdown: React.FC<{
   );
 };
 
-const AnalystView: React.FC = () => {
+
+const User: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const notChecked = api.articles.getUncheckedArticles.useQuery();
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
+  const [query, setQuery] = useState("");
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<keyof Article | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [openArticleId, setOpenArticleId] = useState<string | null>(null);
+  const articlesQuery = api.articles.getUncheckedArticles.useQuery();
   const updateArticleMutation = api.articles.update.useMutation();
+  const [openDetails, setOpenDetails] = useState<string[]>([]);
+
+  const toggleDetails = (articleId: string) => {
+    setOpenDetails((prevState) => {
+      if (prevState.includes(articleId)) {
+        return prevState.filter((id) => id !== articleId);
+      }
+      return [...prevState, articleId];
+    });
+  };
 
   useEffect(() => {
-    if (notChecked.data) {
-      setArticles(notChecked.data);
+    if (articlesQuery.data) {
+      setAllArticles(articlesQuery?.data);
     }
-  }, [notChecked.data]);
+  }, [articlesQuery.data]);
+
+  const allAvailableYears = useMemo(() => {
+    return Array.from(
+      new Set(allArticles.map((a) => new Date(a.date).getFullYear())),
+    ).sort((a, b) => b - a);
+  }, [allArticles]);
+
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(event.target.value || null);
+  };
+
+  useEffect(() => {
+    const lowercasedQuery = query.toLowerCase();
+    let filteredData = allArticles.filter((article) => {
+      return article.se_practice.toLowerCase().includes(lowercasedQuery);
+    });
+    if (selectedYear) {
+      filteredData = filteredData.filter((article) => {
+        return new Date(article.date).getFullYear() === parseInt(selectedYear);
+      });
+    }
+    setArticles(filteredData);
+  }, [query, selectedYear, allArticles]);
+
+  const sortedArticles = useMemo(() => {
+    const sorted = [...articles];
+    if (sortField) {
+      sorted.sort((a, b) => {
+        if (a[sortField] && b[sortField]) {
+          if (a[sortField]! < b[sortField]!)
+            return sortDirection === "asc" ? -1 : 1;
+          if (a[sortField]! > b[sortField]!)
+            return sortDirection === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sorted;
+  }, [articles, sortField, sortDirection]);
+
+  const handleSort = (field: keyof Article) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
 
   const saveArticleChanges = (updatedArticle: Article) => {
     // Ensure the article has an ID before updating
@@ -161,43 +228,67 @@ const AnalystView: React.FC = () => {
     }
   };
 
-  const handleAnalysisOpen = (articleId: string) => {
-    setOpenArticleId(articleId);
-  };
-
-  const handleAnalysisClose = () => {
-    setOpenArticleId(null);
-  };
-
   return (
-    <div className={styles.container}>
-      <table className={styles.articlesTable}>
-        {/* ... (table headers) */}
-        <tbody>
-          {articles.map((article) => (
-            <tr key={article.id}>
-              {/* ... (other table data) */}
-              <td className={styles.detailsColumn}>
-                <span className={styles.articleTitle}>{article.title}</span>
-                <Button
-                  onClick={() => article.id && handleAnalysisOpen(article.id)}
-                >
-                  Analyze
-                </Button>
-                {openArticleId === article.id && (
-                  <AnalysisDropdown
-                    article={article}
-                    onSave={saveArticleChanges}
-                    onClose={handleAnalysisClose}
-                  />
-                )}
-              </td>
-            </tr>
+    <>
+
+      <div className={styles.container}>
+        <NavigationMenuDemo />
+        <div className={styles.searchWrapper}>
+          <Search onUpdate={setQuery} />
+          {/* <select
+          className={styles.inputElement}
+          onChange={handleYearChange}
+          value={selectedYear ?? ""}
+        >
+          <option value="">All Years</option>
+          {allAvailableYears.map((year) => (
+            <option key={year} value={year.toString()}>
+              {year}
+            </option>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </select> */}
+          {/* Tony didnt like the filter by year button :( */}
+        </div>
+        <table className={styles.articlesTable}>
+          <thead>
+            <tr>
+              <th onClick={() => handleSort("title")}>Title</th>
+              <th onClick={() => handleSort("author")}>Author</th>
+              <th onClick={() => handleSort("date")}>Date</th>
+              <th onClick={() => handleSort("journal_name")}>Journal Name</th>
+              <th onClick={() => handleSort("se_practice")}>SE Practice</th>
+              <th className={styles.detailsColumn}>More Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedArticles.map((article) => (
+              <React.Fragment key={article.id}>
+                <tr>
+                  <td>{article.title}</td> <td>{article.author}</td>
+                  <td>{new Date(article.date).toLocaleDateString()}</td>
+                  <td>{article.journal_name}</td> <td>{article.se_practice}</td>
+                  <td className={`flex justify-center ${styles.detailsColumn}`}>
+                    <Button
+                      onClick={() => article.id && setOpenArticleId(article.id)}
+                    >
+                      Analyze
+                    </Button>
+                    {openArticleId === article.id && (
+                      <AnalysisDropdown
+                        article={article}
+                        onSave={saveArticleChanges}
+                        onClose={() => setOpenArticleId(null)}
+                      />
+                    )}
+                  </td>
+                </tr>
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
-export default AnalystView;
+export default User;
