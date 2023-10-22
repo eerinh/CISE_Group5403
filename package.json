@@ -6,7 +6,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "scripts": {
-    "vercel-build": "prisma db seed && next build",
+    "vercel-build": "next build && prisma db seed",
     "build": "next build",
     "dev": "next dev",
     "postinstall": "prisma generate",
