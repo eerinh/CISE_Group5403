@@ -13,7 +13,7 @@ const AnalysisDropdown: React.FC<{
 
   const updateArticleProperty = <T extends keyof Article>(
     property: T,
-    value: Article[T]
+    value: Article[T],
   ) => {
     setEditedArticle((prev) => ({
       ...prev,
@@ -21,7 +21,7 @@ const AnalysisDropdown: React.FC<{
       updatedAt: new Date(),
     }));
   };
-``
+  ``;
   return (
     <div className={styles.analysisDropdown}>
       <label htmlFor="titleInput">Title:</label>
@@ -171,31 +171,42 @@ const AnalystView: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <table className={styles.articlesTable}>
-        {/* ... (table headers) */}
-        <tbody>
-          {articles.map((article) => (
-            <tr key={article.id}>
-              {/* ... (other table data) */}
-              <td className={styles.detailsColumn}>
-                <span className={styles.articleTitle}>{article.title}</span>
-                <Button
-                  onClick={() => article.id && handleAnalysisOpen(article.id)}
-                >
-                  Analyze
-                </Button>
-                {openArticleId === article.id && (
-                  <AnalysisDropdown
-                    article={article}
-                    onSave={saveArticleChanges}
-                    onClose={handleAnalysisClose}
-                  />
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {articles.length === 0 ? (
+        <div className={styles.noArticlesMessage}>No articles</div>
+      ) : (
+        <>
+          <h2 className={styles.newArticlesHeader}>
+            New Articles ({articles.length})
+          </h2>
+          <table className={styles.articlesTable}>
+            {/* ... (table headers) */}
+            <tbody>
+              {articles.map((article) => (
+                <tr key={article.id}>
+                  {/* ... (other table data) */}
+                  <td className={styles.detailsColumn}>
+                    <span className={styles.articleTitle}>{article.title}</span>
+                    <Button
+                      onClick={() =>
+                        article.id && handleAnalysisOpen(article.id)
+                      }
+                    >
+                      Analyze
+                    </Button>
+                    {openArticleId === article.id && (
+                      <AnalysisDropdown
+                        article={article}
+                        onSave={saveArticleChanges}
+                        onClose={handleAnalysisClose}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 };
