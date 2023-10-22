@@ -59,8 +59,7 @@
 .analysisDropdown input[type="date"] {
   width: 150px; /* Adjusted width for the date input */
   /* top and bottom padding */
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 30px;
 }
 
 .analysisDropdown label {

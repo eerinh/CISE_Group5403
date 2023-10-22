@@ -7,6 +7,7 @@ import { Article } from "~/types";
 import { Button } from "~/components/ui/button";
 import Rating from "~/components/ui/rating";
 import UserDataContext from "~/providers/UserDataProvider";
+import { NavigationMenuDemo } from "~/components/Navigation";
 
 const User: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -93,6 +94,8 @@ const User: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <NavigationMenuDemo />
+      <h3 className="text-2xl text-center font-bold pb-3">User View</h3>
       <div className={styles.searchWrapper}>
         <Search onUpdate={setQuery} />
         <select
@@ -108,10 +111,10 @@ const User: React.FC = () => {
           ))}
         </select>
       </div>
-      <div className={styles.displayTypeButtons}>
-        <Button onClick={() => setDisplayType("list")}>List</Button>
-        <Button onClick={() => setDisplayType("grid")}>Grid</Button>
-        <Button onClick={() => setDisplayType("card")}>Card</Button>
+      <div className={`justify-between flex space-x-4 pb-4`}>
+        <Button className="w-full" onClick={() => setDisplayType("list")}>List</Button>
+        <Button className="w-full" onClick={() => setDisplayType("grid")}>Grid</Button>
+        <Button className="w-full" onClick={() => setDisplayType("card")}>Card</Button>
       </div>
       {displayType === "list" && (
         <table className={styles.articlesTable}>
@@ -135,7 +138,7 @@ const User: React.FC = () => {
                   <td>{new Date(article.date).toLocaleDateString()}</td>
                   <td>{article.journal_name}</td>
                 <td>{article.se_practice}</td>
-                  <td><Rating currentRating={article.averageRating ?? 0} updateRating={(rating) => { console.log(rating) }} /> ({article.totalRatings} ratings)</td>
+                  <td className="text-center"><Rating currentRating={article.averageRating ?? 0} updateRating={(rating) => { console.log(rating) }} /> ({article.totalRatings} ratings)</td>
                 <td><Rating currentRating={article.currentRating ?? 0} updateRating={(rating) => {
                   setRatingMutation.mutate({
                     userId: userDataContext.id, 
@@ -143,8 +146,9 @@ const User: React.FC = () => {
                     rating: rating
                   })
                 }} /></td>
-                <td className={`flex justify-center ${styles.detailsColumn}`}>
+                <td className={`justify-center ${styles.detailsColumn}`}>
                     <Button
+                      variant={openDetails.includes(article.id!) ? "destructive" : "default"}
                       className={styles.buttonFullWidth}
                       onClick={() => toggleDetails(article.id!)}
                     >
