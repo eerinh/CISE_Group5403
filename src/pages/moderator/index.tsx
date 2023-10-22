@@ -108,6 +108,7 @@ const User: React.FC = () => {
     return (
         <div className={styles.container}>
             <NavigationMenuDemo />
+            <h3 className="text-2xl text-center font-bold pb-3">Moderator View</h3>
             <div className={styles.searchWrapper}>
                 <Search onUpdate={setQuery} />
                 <select
