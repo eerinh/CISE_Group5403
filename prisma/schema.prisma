@@ -30,7 +30,7 @@ model Article {
 }
 
 model Rating {
-    identifier String  @map("_id") @id
+    identifier String  @map("_id") @id @default(cuid()) 
     ratingAmount Int 
     article      Article @relation(fields: [articleId], references: [id])
     articleId    String
@@ -76,7 +76,7 @@ model User {
 }
 
 model VerificationToken {
-    identifier String @map("_id") @id
+    identifier String @map("_id") @id @default(cuid()) 
     token      String   @unique
     expires    DateTime
 
