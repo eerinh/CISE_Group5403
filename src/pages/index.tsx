@@ -7,6 +7,7 @@ import { Article } from "~/types";
 import { Button } from "~/components/ui/button";
 import Rating from "~/components/ui/rating";
 import UserDataContext from "~/providers/UserDataProvider";
+import { NavigationMenuDemo } from "~/components/Navigation";
 
 const User: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -93,6 +94,7 @@ const User: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <NavigationMenuDemo />
       <div className={styles.searchWrapper}>
         <Search onUpdate={setQuery} />
         <select
@@ -145,6 +147,7 @@ const User: React.FC = () => {
                 }} /></td>
                 <td className={`justify-center ${styles.detailsColumn}`}>
                     <Button
+                      variant={openDetails.includes(article.id!) ? "destructive" : "default"}
                       className={styles.buttonFullWidth}
                       onClick={() => toggleDetails(article.id!)}
                     >
