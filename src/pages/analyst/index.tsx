@@ -27,7 +27,9 @@ const AnalysisDropdown: React.FC<{
   ``;
   return (
     <div className={styles.analysisDropdown}>
-      <label htmlFor="titleInput"className={styles.boldLabel}>Title:</label>
+      <label htmlFor="titleInput" className={styles.boldLabel}>
+        Title:
+      </label>
       <input
         id="titleInput"
         type="text"
@@ -35,14 +37,18 @@ const AnalysisDropdown: React.FC<{
         onChange={(e) => updateArticleProperty("title", e.target.value)}
         placeholder="Title"
       />
-      <label htmlFor="authorInput"className={styles.boldLabel}>Author:</label>
+      <label htmlFor="authorInput" className={styles.boldLabel}>
+        Author:
+      </label>
       <input
         type="text"
         value={editedArticle.author}
         onChange={(e) => updateArticleProperty("author", e.target.value)}
         placeholder="Author"
       />
-      <label htmlFor="dateInput"className={styles.boldLabel}>Date:</label>
+      <label htmlFor="dateInput" className={styles.boldLabel}>
+        Date:
+      </label>
       <input
         type="date"
         value={editedArticle.date.toISOString().split("T")[0]}
@@ -50,28 +56,36 @@ const AnalysisDropdown: React.FC<{
           updateArticleProperty("date", new Date(e.target.value))
         }
       />
-      <label htmlFor="journalInput"className={styles.boldLabel}>Journal:</label>
+      <label htmlFor="journalInput" className={styles.boldLabel}>
+        Journal:
+      </label>
       <input
         type="text"
         value={editedArticle.journal_name}
         onChange={(e) => updateArticleProperty("journal_name", e.target.value)}
         placeholder="Journal Name"
       />
-      <label htmlFor="volumeInput"className={styles.boldLabel}>SE Practice:</label>
+      <label htmlFor="volumeInput" className={styles.boldLabel}>
+        SE Practice:
+      </label>
       <input
         type="text"
         value={editedArticle.se_practice}
         onChange={(e) => updateArticleProperty("se_practice", e.target.value)}
         placeholder="SE Practice"
       />
-      <label htmlFor="issueInput"className={styles.boldLabel}>Claim:</label>
+      <label htmlFor="issueInput" className={styles.boldLabel}>
+        Claim:
+      </label>
       <input
         type="text"
         value={editedArticle.claim}
         onChange={(e) => updateArticleProperty("claim", e.target.value)}
         placeholder="Claim"
       />
-      <label htmlFor="doiInput"className={styles.boldLabel}>Result of Evidence:</label>
+      <label htmlFor="doiInput" className={styles.boldLabel}>
+        Result of Evidence:
+      </label>
       <input
         type="text"
         value={editedArticle.result_of_evidence}
@@ -80,7 +94,9 @@ const AnalysisDropdown: React.FC<{
         }
         placeholder="Result of Evidence"
       />
-      <label htmlFor="doiInput"className={styles.boldLabel}>Type of Research:</label>
+      <label htmlFor="doiInput" className={styles.boldLabel}>
+        Type of Research:
+      </label>
       <input
         type="text"
         value={editedArticle.type_of_research}
@@ -89,7 +105,9 @@ const AnalysisDropdown: React.FC<{
         }
         placeholder="Type of Research"
       />
-      <label htmlFor="doiInput"className={styles.boldLabel}>Type of Participant:</label>
+      <label htmlFor="doiInput" className={styles.boldLabel}>
+        Type of Participant:
+      </label>
       <input
         type="text"
         value={editedArticle.type_of_participant}
@@ -119,7 +137,6 @@ const AnalysisDropdown: React.FC<{
     </div>
   );
 };
-
 
 const User: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -229,44 +246,55 @@ const User: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
-      {articles.length === 0 ? (
-        <div className={styles.noArticlesMessage}>No articles</div>
-      ) : (
-        <>
-          <h2 className={styles.newArticlesHeader}>
-            New Articles ({articles.length})
-          </h2>
-          <table className={styles.articlesTable}>
-            {/* ... (table headers) */}
-            <tbody>
-              {articles.map((article) => (
-                <tr key={article.id}>
-                  {/* ... (other table data) */}
-                  <td className={styles.detailsColumn}>
-                    <span className={styles.articleTitle}>{article.title}</span>
-                    <Button
-                      onClick={() =>
-                        article.id && setOpenArticleId(article.id)
-                      }
-                    >
-                      Analyze
-                    </Button>
-                    {openArticleId === article.id && (
-                      <AnalysisDropdown
-                        article={article}
-                        onSave={saveArticleChanges}
-                        onClose={() => { setOpenArticleId(null) }}
-                      />
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
-    </div>
+    <>
+      <div className={styles.container}>
+        <NavigationMenuDemo />
+        <h3 className="pb-3 text-center text-2xl font-bold">Analyst View</h3>
+        <div className={styles.searchWrapper}>
+          <Search onUpdate={setQuery} />
+          <select
+            className={styles.inputElement}
+            onChange={handleYearChange}
+            value={selectedYear ?? ""}
+          >
+            <option value="">All Years</option>
+            {allAvailableYears.map((year) => (
+              <option key={year} value={year.toString()}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+        <table className={styles.articlesTable}>
+          {/* ... [Table headers] */}
+          <tbody>
+            {sortedArticles.map((article) => (
+              <tr key={article.id}>
+                <td>{article.title}</td>
+                <td>{article.author}</td>
+                <td>{new Date(article.date).toLocaleDateString()}</td>
+                <td>{article.journal_name}</td>
+                <td>{article.se_practice}</td>
+                <td className={`flex justify-center ${styles.detailsColumn}`}>
+                  <Button
+                    onClick={() => article.id && setOpenArticleId(article.id)}
+                  >
+                    Analyze
+                  </Button>
+                  {openArticleId === article.id && (
+                    <AnalysisDropdown
+                      article={article}
+                      onSave={saveArticleChanges}
+                      onClose={() => setOpenArticleId(null)}
+                    />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
