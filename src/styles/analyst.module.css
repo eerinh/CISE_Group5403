@@ -83,3 +83,11 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
+.newArticlesHeader {
+  font-size: 1.5rem;
+  margin: 0.5rem 0 1rem; /* Adjust as needed */
+  font-weight: 600; /* Bold for emphasis */
+  color: #333; /* Dark color for better visibility */
+  border-bottom: 2px solid #e1e4e8; /* Optional: Gives a separating line under the title */
+  padding-bottom: 0.5rem; /* Adds some space between the title and the border */
+}
