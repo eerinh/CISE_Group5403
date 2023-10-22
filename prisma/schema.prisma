@@ -30,10 +30,12 @@ model Article {
 }
 
 model Rating {
-    id           String  @id @default(cuid())
     ratingAmount Int
     article      Article @relation(fields: [articleId], references: [id])
     articleId    String
+    userId       String
+
+    @@unique([userId, articleId])
 }
 
 model Account {

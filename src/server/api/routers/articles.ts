@@ -2,8 +2,9 @@ import { Rating } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { Article } from "~/types";
 
-const aritlce = z.object({
+const aritcle = z.object({
   id: z.string(),
   title: z.string(),
   author: z.string(),
@@ -17,35 +18,56 @@ const aritlce = z.object({
   approved: z.boolean().default(false),
   checked: z.boolean().default(false),
   averageRating: z.number().optional(),
+  totalRatings: z.number().optional(),
+  currentRating: z.number().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
 
+interface ExtendedArticle extends Article {
+  averageRating?: number;
+  totalRatings?: number;
+  currentRating?: number;
+  ratings?: Rating[];
+}
+
 export const articleRouter = createTRPCRouter({
   getAll: publicProcedure
-    .input(z.void())
-    .output(z.array(aritlce))
+    .input(z.object({ userId: z.string().optional() }))
+    .output(z.any())
     .meta({ openapi: { method: "GET", path: "/articles" } })
-    .query(async ({ ctx }) => {
+    .query(async ({ input, ctx }) => {
       const articles = await ctx.prisma.article.findMany({
         include: {
-          ratings: true, // Include ratings for each article
+          ratings: true,
         },
       });
 
-      // Calculate average rating for each article
-      articles.forEach((article) => {
-        const totalRatings = article.ratings.reduce((sum, rating) => sum + rating.ratingAmount,0,);
+      for (const article of articles as ExtendedArticle[]) {
+        if (!article.ratings) return;
+        const totalRatings = article.ratings.reduce((sum, rating) => sum + rating.ratingAmount, 0,);
         article.averageRating = article.ratings.length ? totalRatings / article.ratings.length : 0;
+        article.totalRatings = article.ratings.length;
         delete article.ratings; // If you don't want to send the ratings in the response
-      });
+
+        if (input?.userId) {
+          const ratings = await ctx.prisma.rating.findFirst({
+            where: {
+              userId: input.userId,
+              articleId: article.id,
+            },
+          })
+          article.currentRating = ratings?.ratingAmount ?? 0;
+        }
+      };
+
 
       return articles;
     }),
 
   get: publicProcedure
     .input(z.object({ id: z.string() }))
-    .output(aritlce.nullable())
+    .output(aritcle.nullable())
     .meta({ openapi: { method: "GET", path: "/articles/{id}" } })
     .query(async ({ input, ctx }) => {
       const article = await ctx.prisma.article.findFirst({
@@ -57,23 +79,23 @@ export const articleRouter = createTRPCRouter({
         },
       });
 
-      if (article) {
-        const totalRatings = article.ratings.reduce(
-          (sum, rating) => sum + rating.ratingAmount,
-          0,
-        );
-        article.averageRating = article.ratings.length
-          ? totalRatings / article.ratings.length
-          : 0;
-        delete article.ratings; // If you don't want to send the ratings in the response
-      }
+      // if (article) {
+      //   const totalRatings = article.ratings.reduce(
+      //     (sum, rating) => sum + rating.ratingAmount,
+      //     0,
+      //   );
+      //   article.averageRating = article.ratings.length
+      //     ? totalRatings / article.ratings.length
+      //     : 0;
+      //   delete article.ratings; // If you don't want to send the ratings in the response
+      // }
 
       return article;
     }),
 
   create: publicProcedure
-    .input(aritlce.extend({ id: z.string().optional() }))
-    .output(aritlce)
+    .input(aritcle.extend({ id: z.string().optional() }))
+    .output(aritcle)
     .meta({ openapi: { method: "POST", path: "/articles" } })
     .mutation(({ input, ctx }) => {
       return ctx.prisma.article.create({
@@ -82,8 +104,8 @@ export const articleRouter = createTRPCRouter({
     }),
 
   update: publicProcedure
-    .input(aritlce.partial())
-    .output(aritlce)
+    .input(aritcle.partial())
+    .output(aritcle)
     .meta({ openapi: { method: "PUT", path: "/articles" } })
     .mutation(({ input, ctx }) => {
       return ctx.prisma.article.update({
@@ -95,17 +117,25 @@ export const articleRouter = createTRPCRouter({
     }),
 
   setRating: publicProcedure
-    .input(z.object({ id: z.string(), rating: z.number() }))
-    .output(z.boolean())
+    .input(z.object({ userId: z.string(), articleId: z.string(), rating: z.number() }))
+    .output(z.void())
     .meta({ openapi: { method: "PUT", path: "/articles/rating" } })
-    .mutation(({ input, ctx }) => {
-      return ctx.prisma.article.update({
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.rating.upsert({
         where: {
-          id: input.id,
+          userId_articleId: {
+            userId: input.userId,
+            articleId: input.articleId,
+          }
         },
-        data: {
-          rating: input.rating,
+        update: {
+          ratingAmount: input.rating,
         },
+        create: {
+          userId: input.userId,
+          articleId: input.articleId,
+          ratingAmount: input.rating,
+        }
       });
     }),
 
@@ -117,7 +147,28 @@ export const articleRouter = createTRPCRouter({
       const articles = await ctx.prisma.article.findMany({
         select: {
           id: true,
-          rating: true,
+          ratings: true,
+        },
+      });
+
+      const ratings = articles.flatMap((article) =>
+        article.ratings.map((rating) => ({
+          id: article.id,
+          rating: rating.ratingAmount,
+        }))
+      );
+
+      return ratings;
+    }),
+
+    getUncheckedArticles: publicProcedure
+    .input(z.void())
+    .output(z.array(aritcle))
+    .meta({ openapi: { method: "GET", path: "/articles/unchecked" } })
+    .query(async ({ ctx }) => {
+      const articles = await ctx.prisma.article.findMany({
+        where: {
+          checked: false,
         },
       });
 
