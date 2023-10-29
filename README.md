@@ -1,3 +1,8 @@
+# Product Vision
+Our vision was to build, Software Practice Empirical Evidence Database (SPEED), a searchable database which allows groups of users to view claims about the different software engineering practices.
+This was a group project, where we had to deliever this product to our client within a 5 week period.
+
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
