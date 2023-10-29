@@ -1,5 +1,5 @@
 # Product Vision
-Our vision was to build, Software Practice Empirical Evidence Database (SPEED), a searchable database which allows groups of users to view claims about the different software engineering practices.
+Our vision was to build, Software Practice Empirical Evidence Database (SPEED), a searchable database which allows users to view claims about the different software engineering practices.
 This was a group project, where we had to deliever this product to our client within a 5 week period.
 
 
